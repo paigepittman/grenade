@@ -3,7 +3,7 @@ var game = new Game();
 
 function init() {
   if (game.init()) {
-    console.log("hi")
+  //  console.log("hi")
     game.startGame();
   }
 };
@@ -68,6 +68,9 @@ function Draw() {
   this.speed = 0;
   this.canvasHeight = 0;
   this.canvasWidth = 0;
+  this.collidableWith = "";
+  this.isColliding = false;
+  this.type = "";
 
   this.draw = function() {
 
@@ -75,20 +78,34 @@ function Draw() {
   this.move = function() {
 
   }
+
+  this.isCollidableWith = function(obj) {
+    return (this.collidableWith === obj.type);
+  }
 };
 
 function Pool(max) {
-      console.log("pool")
 
   var size = max;
   var pool = [];
 
+  this.getPool = function() {
+    var obj = [];
+    for (var i = 0; i < size; i++) {
+      if (pool[i].alive) {
+        obj.push(pool[i]);
+      }
+    }
+    return obj;
+  }
+
   this.init = function(obj) {
-    console.log("init")
     if (obj === "hero") {
           for (var i=0; i < size; i++) {
            var shot = new Shot("hero");
-           shot.init(0,0, 40, 40);
+           shot.init(0,0, 20, 20);
+           shot.collidableWith = "plane";
+           shot.type = "claude";
            pool[i] = shot;
           }
      }
@@ -96,6 +113,8 @@ function Pool(max) {
          for (var i=0; i < size; i++) {
           var grenade = new Shot("grenade");
           grenade.init(0,0, 40, 40);
+          grenade.collidableWith = "claude";
+          grenade.type = "grenade";
           pool[i] = grenade;
         }
     }
@@ -103,6 +122,7 @@ function Pool(max) {
          for (var i=0; i < size; i++) {
           var plane = new Plane();
           plane.init(0,0, 40, 40);
+
           pool[i] = plane;
         }
     }
@@ -110,19 +130,12 @@ function Pool(max) {
   };
 
   this.get = function(x, y, speed) {
+    //console.log(speed)
     if (!pool[size -1].alive) {
       pool[size - 1].spawn(x, y, speed);
       pool.unshift(pool.pop());
     }
   };
-
-  this.getTwo = function(x1, y1, speed1, x2, y2, speed2) {
-		if(!pool[size - 1].alive &&
-		   !pool[size - 2].alive) {
-				this.get(x1, y1, speed1);
-				this.get(x2, y2, speed2);
-			 }
-	};
 
   this.animate = function() {
     for (var i = 0; i < size; i++) {
@@ -152,9 +165,15 @@ function Shot(obj) {
   };
 
   this.draw = function() {
+
     this.context.clearRect(this.x, this.y, this.width, this.height);
     this.y -= this.speed;
-    if (type === "hero" && this.y <= 0 - this.height) {
+
+    if (this.isColliding) {
+      return true;
+    }
+
+    else if (type === "hero" && this.y <= 0 - this.height) {
       return true;
     }
     else if (type === "grenade" && this.y >= this.canvasHeight) {
@@ -162,7 +181,7 @@ function Shot(obj) {
     }
     else {
       if (type === "hero") {
-        this.context.drawImage(images.shot, this.x, this.y, 50, 50);
+        this.context.drawImage(images.shot, this.x, this.y, 20, 20);
       }
       else if (type === "grenade") {
         this.context.drawImage(images.grenade, this.x, this.y, 50, 50);
@@ -177,6 +196,7 @@ function Shot(obj) {
     this.y = 0;
     this.speed = 0;
     this.alive = false;
+    this.isColliding = false;
   };
 }
 
@@ -187,10 +207,12 @@ function VonStroke() {
   this.speed = 3;
   this.bulletPool = new Pool(30);
   this.bulletPool.init("hero");
+  this.collidableWith = "grenade";
+  this.type = "claude";
   var firingRate = 15;
   var count = 0;
   this.draw = function() {
-    console.log(this.x)
+  //  console.log(this.x)
     this.context.drawImage(images.vonStroke, this.x, this.y, 80, 80);
 
   };
@@ -199,22 +221,24 @@ function VonStroke() {
     count++;
 
     if (KEY_STATUS.left || KEY_STATUS.right) {
-      console.log("hi")
+    //  console.log("hi")
       this.context.clearRect(this.x, this.y, this.width, this.height);
 
       if (KEY_STATUS.left) {
         this.x -= this.speed
-        if (this.x <= 0) {
-          this.x = 0;
+        if (this.x <= -20) {
+          this.x = -20;
         }
       }
        else if (KEY_STATUS.right) {
           this.x += this.speed
-          if (this.x >= this.canvasWidth - this.width) {
-            this.x = this.canvasWidth - this.width;
+          if (this.x >= this.canvasWidth - 60) {
+            this.x = this.canvasWidth - 60;
           }
         }
-      this.draw();
+        if (!this.isColliding) {
+          this.draw();
+        }
     }
     if (KEY_STATUS.space && count >= firingRate) {
       this.shoot();
@@ -222,7 +246,7 @@ function VonStroke() {
     }
   }
   this.shoot = function() {
-    this.bulletPool.getTwo(this.x+6, this.y, 3, this.x+33, this.y, 3);
+    this.bulletPool.get(this.x+6, this.y, 3, this.x+33, this.y, 3);
   }
 }
 
@@ -245,9 +269,11 @@ bgImage.prototype = new Draw();
 
 
 function Plane() {
-  var percentFire = .01;
+  var percentFire = .2;
   var chance = 0;
   this.alive = false;
+  this.collidableWith = "shot";
+  this.type = "plane";
 
   this.spawn = function(x, y, speed) {
     this.x = x;
@@ -282,15 +308,22 @@ function Plane() {
       this.y -= 5;
       this.speedX = this.speed;
     }
-    this.context.drawImage(images.plane, this.x, this.y, 40, 40);
-    chance = Math.floor(Math.random()*101);
-    if (chance/100 < percentFire) {
-      this.shoot();
+
+    if (!this.isColliding) {
+        this.context.drawImage(images.plane, this.x, this.y, 40, 40);
+        chance = Math.floor(Math.random()*101);
+        if (chance/100 < percentFire) {
+          this.shoot();
+        }
+        return false;
+    }
+    else {
+      return true;
     }
   };
 
   this.shoot = function() {
-    game.grenadePool.get(this.x+this.width/2, this.y+this.height, -2.5);
+    game.grenadePool.get(this.x+this.width/2, this.y+this.height, -1.3);
   }
 
   this.clear = function() {
@@ -300,9 +333,177 @@ function Plane() {
     this.speedX = 0;
     this.speedY = 0;
     this.alive = false;
+    this.isColliding = false;
   }
 }
 Plane.prototype = new Draw();
+
+
+function QuadTree(boundbox, lvl) {
+  var maxObj = 10;
+  this.bounds = boundbox || {
+    x: 0,
+    y: 0,
+    width: 0,
+    height: 0
+  }
+
+  var objs = [];
+  this.nodes = [];
+  var level = lvl || 0;
+  var maxLevels = 5;
+
+  this.clear = function() {
+    objs = [];
+
+    for (var i = 0; i < this.nodes.length; i++) {
+      this.nodes[i].clear();
+    }
+
+    this.nodes = [];
+  }
+
+  this.getAllObjs = function(returned) {
+  //  console.log(returned)
+    for (var i = 0; i < this.nodes.length; i++) {
+      this.nodes[i].getAllObjs(returned);
+    }
+
+    for (var i = 0, len = objs.length; i < len; i++) {
+      returned.push(objs[i]);
+    }
+
+    return returned;
+
+  };
+
+  this.findObjs = function(returned, obj) {
+    if (typeof obj === "undefined") {
+    //  console.log("UNDEFINED");
+      return;
+    }
+
+    var index = this.getIndex(obj);
+    if (index != -1 && this.nodes.length) {
+      this.nodes[index].findObjs(returned, obj);
+    }
+
+    for (var i = 0, len = objs.length; i < len; i++) {
+      returned.push(objs[i]);
+    }
+
+    return returned;
+  }
+  this.insert = function(obj) {
+    ////console.log(obj)
+
+    if (typeof obj === "undefined") {
+      return;
+    }
+    if (obj instanceof Array) {
+      for (var i = 0, len = obj.length; i < len; i++) {
+				this.insert(obj[i]);
+			}
+      return;
+    }
+    if (this.nodes.length) {
+    //  console.log("nodes")
+      var index = this.getIndex(obj);
+
+      if (index != -1) {
+        this.nodes[index].insert(obj);
+
+        return;
+      }
+    }
+
+    objs.push(obj);
+
+    if (objs.length > maxObj && level < maxLevels) {
+      if (this.nodes[0] == null) {
+        this.split();
+      }
+
+      var i = 0;
+      while (i <objs.length) {
+        var index = this.getIndex(objs[i]);
+        if (index != -1) {
+        //  console.log("index", this.nodes[0])
+
+          this.nodes[index].insert((objs.splice(i, 1))[0]);
+        }
+        else {
+          i++;
+        }
+      }
+    }
+  }
+
+  this.getIndex = function(obj) {
+    ////console.log("431", obj)
+    var index = -1;
+    var verticalMidpoint = this.bounds.x + this.bounds.width / 2;
+    var horizontalMidpoint = this.bounds.y + this.bounds.height /2;
+
+    var topQuadrant = (obj.y < horizontalMidpoint && obj.y + obj.height < horizontalMidpoint);
+
+    var bottomQuadrant = (obj.y > horizontalMidpoint);
+
+    if (obj.x < verticalMidpoint &&
+        obj.x + obj.width < verticalMidpoint) {
+      if (topQuadrant) {
+        index = 1;
+      }
+      else if (bottomQuadrant) {
+        index = 2;
+      }
+    }
+
+    else if (obj.x > verticalMidpoint) {
+      if (topQuadrant) {
+        index = 0;
+      }
+      else if (bottomQuadrant) {
+        index = 3;
+      }
+    }
+  //  console.log("index", index)
+
+    	return index;
+  };
+
+  this.split = function() {
+    var subWidth = (this.bounds.width / 2) | 0;
+    var subHeight = (this.bounds.height / 2) | 0;
+
+    this.nodes[0] = new QuadTree({
+      x: this.bounds.x + subWidth,
+      y: this.bounds.y,
+      width: subWidth,
+      height: subHeight
+    }, level+1);
+    this.nodes[1] = new QuadTree({
+      x: this.bounds.x,
+      y: this.bounds.y,
+      width: subWidth,
+      height: subHeight
+    }, level+1);
+    this.nodes[2] = new QuadTree({
+      x: this.bounds.x,
+      y: this.bounds.y + subHeight,
+      width: subWidth,
+      height: subHeight
+    }, level+1);
+    this.nodes[3] = new QuadTree({
+      x: this.bounds.x + subWidth,
+      y: this.bounds.y + subHeight,
+      width: subWidth,
+      height: subHeight
+    }, level+1);
+  }
+}
+
+
 
 function Game() {
   this.init = function() {
@@ -312,7 +513,6 @@ function Game() {
     this.mainCanvas = document.getElementById("main");
 
     if (this.bgCanvas.getContext) {
-      console.log("game")
       this.bgContext = this.bgCanvas.getContext("2d");
       this.claudeContext = this.claudeCanvas.getContext("2d");
       this.mainContext = this.mainCanvas.getContext("2d");
@@ -340,27 +540,28 @@ function Game() {
       this.background.init(0,0);
       this.vonstroke = new VonStroke();
 
-      var claudeStartX = this.claudeCanvas.width/2 - images.vonStroke.width;
-      var claudeStartY = this.claudeCanvas.height/3;
+      var claudeStartX = this.claudeCanvas.width/2;
+      var claudeStartY = this.claudeCanvas.height/4*3;
       this.vonstroke.init(claudeStartX, claudeStartY, images.vonStroke.width, images.vonStroke.height);
-      this.planePool = new Pool(30);
+      this.planePool = new Pool(10);
       this.planePool.init("plane");
-      var height = images.plane.height;
-      var width = images.plane.width;
-      var x = 100;
+      var height = 80;
+      var width = 80;
+      var x = 10;
       var y = -height;
       var space = y * 1.5;
-      for (var i = 1; i <= 18; i++) {
+      for (var i = 1; i <= 10; i++) {
         this.planePool.get(x, y, 2);
-        x += width + 25;
+        x += width + 5;
         if (i % 6 === 0) {
           x = 100;
           y += space;
         }
       };
-      this.grenadePool = new Pool(50);
+      this.grenadePool = new Pool(10);
       this.grenadePool.init("grenade");
 
+      this.quadTree = new QuadTree({x:0,y:0,width:this.mainCanvas.width,height:this.mainCanvas.height});
 
       return true;
     }
@@ -369,13 +570,21 @@ function Game() {
     }
   }
   this.startGame = function() {
-    console.log("start")
+  //  console.log("start")
     this.vonstroke.draw();
     animate();
   }
 };
 
 function animate() {
+  game.quadTree.clear();
+  game.quadTree.insert(game.vonstroke);
+  game.quadTree.insert(game.vonstroke.bulletPool.getPool());
+  game.quadTree.insert(game.planePool.getPool());
+  game.quadTree.insert(game.grenadePool.getPool());
+
+  detectCollision();
+
   requestAnimFrame(animate);
   game.background.draw();
   game.vonstroke.move();
@@ -383,6 +592,28 @@ function animate() {
   game.planePool.animate();
   game.grenadePool.animate();
 }
+
+
+function detectCollision() {
+	var objects = [];
+	game.quadTree.getAllObjs(objects);
+
+	for (var x = 0, len = objects.length; x < len; x++) {
+		game.quadTree.findObjs(obj = [], objects[x]);
+
+		for (y = 0, length = obj.length; y < length; y++) {
+
+			if (objects[x].collidableWith === obj[y].type &&
+				(objects[x].x < obj[y].x + obj[y].width &&
+			     objects[x].x + objects[x].width > obj[y].x &&
+				 objects[x].y < obj[y].y + obj[y].height &&
+				 objects[x].y + objects[x].height > obj[y].y)) {
+				objects[x].isColliding = true;
+				obj[y].isColliding = true;
+			}
+		}
+	}
+};
 
 KEY_CODES = {
   32: 'space',
@@ -407,7 +638,7 @@ for (code in KEY_CODES) {
  * key it was.
  */
 document.onkeydown = function(e) {
-  console.log("heeee")
+//  console.log("heeee")
   // Firefox and opera use charCode instead of keyCode to
   // return which key was pressed.
   var keyCode = (e.keyCode) ? e.keyCode : e.charCode;
