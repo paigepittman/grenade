@@ -59,7 +59,7 @@ this.plane.src = "http://www.air-industries.com/Images/airplane.png";
 
 function Draw() {
   this.init = function(x, y, width, height) {
-
+    //console.log(width)
     this.x = x;
     this.y = y;
     this.width = width;
@@ -130,7 +130,7 @@ function Pool(max) {
   };
 
   this.get = function(x, y, speed) {
-    //console.log(speed)
+    //console.log(x,y)
     if (!pool[size -1].alive) {
       pool[size - 1].spawn(x, y, speed);
       pool.unshift(pool.pop());
@@ -158,6 +158,7 @@ function Shot(obj) {
   var type = obj;
 
   this.spawn = function(x, y, speed) {
+
     this.x = x;
     this.y = y;
     this.speed = speed;
@@ -165,7 +166,7 @@ function Shot(obj) {
   };
 
   this.draw = function() {
-
+      //console.log(this.height)
     this.context.clearRect(this.x, this.y, this.width, this.height);
     this.y -= this.speed;
 
@@ -212,7 +213,7 @@ function VonStroke() {
   var firingRate = 15;
   var count = 0;
   this.draw = function() {
-  //  console.log(this.x)
+  console.log(this.x)
     this.context.drawImage(images.vonStroke, this.x, this.y, 80, 80);
 
   };
@@ -221,7 +222,7 @@ function VonStroke() {
     count++;
 
     if (KEY_STATUS.left || KEY_STATUS.right) {
-    //  console.log("hi")
+      //console.log(this.width)
       this.context.clearRect(this.x, this.y, this.width, this.height);
 
       if (KEY_STATUS.left) {
@@ -246,7 +247,7 @@ function VonStroke() {
     }
   }
   this.shoot = function() {
-    this.bulletPool.get(this.x+6, this.y, 3, this.x+33, this.y, 3);
+    this.bulletPool.get(this.x+30, this.y, 3);
   }
 }
 
@@ -269,7 +270,7 @@ bgImage.prototype = new Draw();
 
 
 function Plane() {
-  var percentFire = .2;
+  var percentFire = .7;
   var chance = 0;
   this.alive = false;
   this.collidableWith = "shot";
@@ -282,9 +283,9 @@ function Plane() {
     this.speedX = 0;
     this.speedY = speed;
     this.alive = true;
-    this.leftEdge = this.x - 90;
-    this.rightEdge = this.x + 90;
-    this.bottomEdge = this.y + 240;
+    this.leftEdge = this.x - 15;
+    this.rightEdge = this.x + 190;
+    this.bottomEdge = this.y + 150;
 
   }
 
@@ -321,9 +322,8 @@ function Plane() {
       return true;
     }
   };
-
   this.shoot = function() {
-    game.grenadePool.get(this.x+this.width/2, this.y+this.height, -1.3);
+    game.grenadePool.get(this.x, this.y-5, -1.2);
   }
 
   this.clear = function() {
@@ -340,6 +340,7 @@ Plane.prototype = new Draw();
 
 
 function QuadTree(boundbox, lvl) {
+
   var maxObj = 10;
   this.bounds = boundbox || {
     x: 0,
@@ -364,7 +365,7 @@ function QuadTree(boundbox, lvl) {
   }
 
   this.getAllObjs = function(returned) {
-  //  console.log(returned)
+  //console.log(returned)
     for (var i = 0; i < this.nodes.length; i++) {
       this.nodes[i].getAllObjs(returned);
     }
@@ -440,10 +441,10 @@ function QuadTree(boundbox, lvl) {
   }
 
   this.getIndex = function(obj) {
-    ////console.log("431", obj)
+    //console.log("obj:", obj, "objx:", obj.x)
     var index = -1;
-    var verticalMidpoint = this.bounds.x + this.bounds.width / 2;
-    var horizontalMidpoint = this.bounds.y + this.bounds.height /2;
+    var verticalMidpoint = this.bounds.x + this.bounds.width / 5;
+    var horizontalMidpoint = this.bounds.y + this.bounds.height /5;
 
     var topQuadrant = (obj.y < horizontalMidpoint && obj.y + obj.height < horizontalMidpoint);
 
@@ -473,7 +474,7 @@ function QuadTree(boundbox, lvl) {
   };
 
   this.split = function() {
-    var subWidth = (this.bounds.width / 2) | 0;
+    var subWidth = (this.bounds.width / 10) | 0;
     var subHeight = (this.bounds.height / 2) | 0;
 
     this.nodes[0] = new QuadTree({
@@ -542,11 +543,11 @@ function Game() {
 
       var claudeStartX = this.claudeCanvas.width/2;
       var claudeStartY = this.claudeCanvas.height/4*3;
-      this.vonstroke.init(claudeStartX, claudeStartY, images.vonStroke.width, images.vonStroke.height);
-      this.planePool = new Pool(10);
+      this.vonstroke.init(claudeStartX, claudeStartY, 80, 80);
+      this.planePool = new Pool(4);
       this.planePool.init("plane");
-      var height = 80;
-      var width = 80;
+      var height = 100;
+      var width = 100;
       var x = 10;
       var y = -height;
       var space = y * 1.5;
@@ -558,7 +559,7 @@ function Game() {
           y += space;
         }
       };
-      this.grenadePool = new Pool(10);
+      this.grenadePool = new Pool(5);
       this.grenadePool.init("grenade");
 
       this.quadTree = new QuadTree({x:0,y:0,width:this.mainCanvas.width,height:this.mainCanvas.height});
@@ -570,7 +571,6 @@ function Game() {
     }
   }
   this.startGame = function() {
-  //  console.log("start")
     this.vonstroke.draw();
     animate();
   }
