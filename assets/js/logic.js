@@ -44,16 +44,16 @@ var images = new function() {
   }
 
 
-   this.background.src = "https://wallpapertag.com/wallpaper/full/e/0/6/345851-8-bit-background-1920x1080-for-iphone-7.jpg";
+   this.background.src = "assets/images/background.PNG";
 
-  this.vonStroke.src = "http://piq.codeus.net/static/media/userpics/piq_63249_400x400.png";
+  this.vonStroke.src = "assets/images/claude.PNG";
 
   this.shot.src = "http://www.extrafeet.com/stickers/images/stixels_fire_small.gif";
 
 
-this.grenade.src = "http://pixelartmaker.com/art/796c8aedf632be7.png";
+this.grenade.src = "assets/images/grenade.PNG";
 
-this.plane.src = "http://www.air-industries.com/Images/airplane.png";
+this.plane.src = "assets/images/plane.PNG";
 
   };
 
@@ -112,7 +112,7 @@ function Pool(max) {
     else if (obj === "grenade") {
          for (var i=0; i < size; i++) {
           var grenade = new Shot("grenade");
-          grenade.init(0,0, 40, 40);
+          grenade.init(0,0, images.grenade.width, images.grenade.height);
           grenade.collidableWith = "claude";
           grenade.type = "grenade";
           pool[i] = grenade;
@@ -121,7 +121,7 @@ function Pool(max) {
         else if (obj === "plane") {
          for (var i=0; i < size; i++) {
           var plane = new Plane();
-          plane.init(0,0, 40, 40);
+          plane.init(0,0, images.plane.width, images.plane.height);
 
           pool[i] = plane;
         }
@@ -185,7 +185,7 @@ function Shot(obj) {
         this.context.drawImage(images.shot, this.x, this.y, 20, 20);
       }
       else if (type === "grenade") {
-        this.context.drawImage(images.grenade, this.x, this.y, 50, 50);
+        this.context.drawImage(images.grenade, this.x, this.y);
 
       }
       return false;
@@ -214,7 +214,7 @@ function VonStroke() {
   var count = 0;
   this.draw = function() {
   console.log(this.x)
-    this.context.drawImage(images.vonStroke, this.x, this.y, 80, 80);
+    this.context.drawImage(images.vonStroke, this.x, this.y, images.vonStroke.width, images.vonStroke.height);
 
   };
 
@@ -237,9 +237,10 @@ function VonStroke() {
             this.x = this.canvasWidth - 60;
           }
         }
-        if (!this.isColliding) {
-          this.draw();
-        }
+
+    }
+    if (!this.isColliding) {
+      this.draw();
     }
     if (KEY_STATUS.space && count >= firingRate) {
       this.shoot();
@@ -290,7 +291,7 @@ function Plane() {
   }
 
   this.draw = function() {
-    this.context.clearRect(this.x-1, this.y, this.width+1, this.height);
+    this.context.clearRect(this.x, this.y, this.width+3, this.height+3);
     this.x += this.speedX;
     this.y += this.speedY;
     if (this.x <= this.leftEdge) {
@@ -311,7 +312,7 @@ function Plane() {
     }
 
     if (!this.isColliding) {
-        this.context.drawImage(images.plane, this.x, this.y, 40, 40);
+        this.context.drawImage(images.plane, this.x, this.y, images.plane.width, images.plane.height);
         chance = Math.floor(Math.random()*101);
         if (chance/100 < percentFire) {
           this.shoot();
@@ -323,7 +324,7 @@ function Plane() {
     }
   };
   this.shoot = function() {
-    game.grenadePool.get(this.x, this.y-5, -1.2);
+    game.grenadePool.get(this.x, this.y+20, -1.2);
   }
 
   this.clear = function() {
@@ -475,10 +476,10 @@ function QuadTree(boundbox, lvl) {
 
   this.split = function() {
     var subWidth = (this.bounds.width / 10) | 0;
-    var subHeight = (this.bounds.height / 2) | 0;
+    var subHeight = (this.bounds.height / 10) | 0;
 
     this.nodes[0] = new QuadTree({
-      x: this.bounds.x + subWidth,
+      x: this.bounds.x,
       y: this.bounds.y,
       width: subWidth,
       height: subHeight
@@ -542,8 +543,8 @@ function Game() {
       this.vonstroke = new VonStroke();
 
       var claudeStartX = this.claudeCanvas.width/2;
-      var claudeStartY = this.claudeCanvas.height/4*3;
-      this.vonstroke.init(claudeStartX, claudeStartY, 80, 80);
+      var claudeStartY = 290;
+      this.vonstroke.init(claudeStartX, claudeStartY, images.vonStroke.width, images.vonStroke.height);
       this.planePool = new Pool(4);
       this.planePool.init("plane");
       var height = 100;
