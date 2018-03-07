@@ -5,7 +5,6 @@ var lives = 4;
 var game = new Game();
 
 
-
 function init() {
   if (game.init()) {
     game.startGame();
@@ -513,6 +512,11 @@ function Game() {
     this.score = 0;
     this.lives = 4;
 
+    var left = document.getElementById("left");
+    var right = document.getElementById("right");
+    var fire = document.getElementById("fire");
+
+
     this.bgCanvas = document.getElementById("background");
     this.claudeCanvas = document.getElementById("claude");
     this.mainCanvas = document.getElementById("main");
@@ -598,6 +602,7 @@ function animate() {
 }
 
 
+
 function detectCollision() {
 	var objects = [];
 	game.quadTree.getAllObjs(objects);
@@ -636,6 +641,9 @@ KEY_STATUS = {};
 for (code in KEY_CODES) {
   KEY_STATUS[KEY_CODES[code]] = false;
 }
+
+
+
 /**
  * Sets up the document to listen to onkeydown events (fired when
  * any key on the keyboard is pressed down). When a key is pressed,
@@ -652,23 +660,6 @@ document.onkeydown = function(e) {
   }
 }
 
-$("button")
-.mousedown(function(e) {
-  e.preventDefault();
-  var keyCode = e.target.value;
-  if (KEY_CODES[keyCode]) {
-  e.preventDefault();
-  KEY_STATUS[KEY_CODES[keyCode]] = true;
-  }
-})
-.mouseup(function(e) {
-  e.preventDefault();
-  var keyCode = e.target.value;
-  if (KEY_CODES[keyCode]) {
-    e.preventDefault();
-    KEY_STATUS[KEY_CODES[keyCode]] = false;
-  }
-  });
 /**
  * Sets up the document to listen to ownkeyup events (fired when
  * any key on the keyboard is released). When a key is released,
@@ -683,6 +674,21 @@ document.onkeyup = function(e) {
   }
 }
 
+
+function touchdown(event) {
+  console.log(event.value)
+    var keyCode = event.value;
+    if (KEY_CODES[keyCode]) {
+    KEY_STATUS[KEY_CODES[keyCode]] = true;
+    }
+  }
+
+function touchoff(event) {
+    var keyCode = event.value;
+    if (KEY_CODES[keyCode]) {
+      KEY_STATUS[KEY_CODES[keyCode]] = false;
+    }
+}
 
 /**
  * requestAnim shim layer by Paul Irish
@@ -700,3 +706,13 @@ window.requestAnimFrame = (function(){
 				window.setTimeout(callback, 1000 / 60);
 			};
 })();
+
+
+
+
+// .vmousedown(function(e) {
+
+// })
+// .vmouseup(function(e) {
+
+//   })
