@@ -52,7 +52,7 @@ var images = new function() {
 
   this.vonStroke.src = "assets/images/claude.PNG";
 
-  this.shot.src = "http://www.extrafeet.com/stickers/images/stixels_fire_small.gif";
+  this.shot.src = "assets/images/flame.gif";
 
 
 this.grenade.src = "assets/images/grenade.PNG";
