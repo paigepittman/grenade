@@ -1,0 +1,9 @@
+TODO
+
+
+-mobile compatibility - tues
+-add scoring system - tues
+-hero disappearing bug
+-add explosions at contact
+-add music
+-start page for choosing DJ

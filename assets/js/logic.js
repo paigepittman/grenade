@@ -1,9 +1,13 @@
 //starting game//
+
+var score = 0;
+var lives = 4;
 var game = new Game();
+
+
 
 function init() {
   if (game.init()) {
-  //  console.log("hi")
     game.startGame();
   }
 };
@@ -59,7 +63,6 @@ this.plane.src = "assets/images/plane.PNG";
 
 function Draw() {
   this.init = function(x, y, width, height) {
-    //console.log(width)
     this.x = x;
     this.y = y;
     this.width = width;
@@ -130,7 +133,6 @@ function Pool(max) {
   };
 
   this.get = function(x, y, speed) {
-    //console.log(x,y)
     if (!pool[size -1].alive) {
       pool[size - 1].spawn(x, y, speed);
       pool.unshift(pool.pop());
@@ -166,14 +168,22 @@ function Shot(obj) {
   };
 
   this.draw = function() {
-      //console.log(this.height)
     this.context.clearRect(this.x, this.y, this.width, this.height);
     this.y -= this.speed;
 
     if (this.isColliding) {
-      return true;
+      console.log(type)
+      if (type === "grenade") {
+        lives--;
+        $("#your-lives").html(lives);
+        return true;
+      }
+      else if (type === "hero") {
+        score++;
+        $("#your-score").html(score);
+        return true;
+      }
     }
-
     else if (type === "hero" && this.y <= 0 - this.height) {
       return true;
     }
@@ -213,7 +223,6 @@ function VonStroke() {
   var firingRate = 15;
   var count = 0;
   this.draw = function() {
-  console.log(this.x)
     this.context.drawImage(images.vonStroke, this.x, this.y, images.vonStroke.width, images.vonStroke.height);
 
   };
@@ -222,7 +231,6 @@ function VonStroke() {
     count++;
 
     if (KEY_STATUS.left || KEY_STATUS.right) {
-      //console.log(this.width)
       this.context.clearRect(this.x, this.y, this.width, this.height);
 
       if (KEY_STATUS.left) {
@@ -366,7 +374,6 @@ function QuadTree(boundbox, lvl) {
   }
 
   this.getAllObjs = function(returned) {
-  //console.log(returned)
     for (var i = 0; i < this.nodes.length; i++) {
       this.nodes[i].getAllObjs(returned);
     }
@@ -381,7 +388,6 @@ function QuadTree(boundbox, lvl) {
 
   this.findObjs = function(returned, obj) {
     if (typeof obj === "undefined") {
-    //  console.log("UNDEFINED");
       return;
     }
 
@@ -397,7 +403,6 @@ function QuadTree(boundbox, lvl) {
     return returned;
   }
   this.insert = function(obj) {
-    ////console.log(obj)
 
     if (typeof obj === "undefined") {
       return;
@@ -409,7 +414,6 @@ function QuadTree(boundbox, lvl) {
       return;
     }
     if (this.nodes.length) {
-    //  console.log("nodes")
       var index = this.getIndex(obj);
 
       if (index != -1) {
@@ -430,7 +434,6 @@ function QuadTree(boundbox, lvl) {
       while (i <objs.length) {
         var index = this.getIndex(objs[i]);
         if (index != -1) {
-        //  console.log("index", this.nodes[0])
 
           this.nodes[index].insert((objs.splice(i, 1))[0]);
         }
@@ -442,7 +445,6 @@ function QuadTree(boundbox, lvl) {
   }
 
   this.getIndex = function(obj) {
-    //console.log("obj:", obj, "objx:", obj.x)
     var index = -1;
     var verticalMidpoint = this.bounds.x + this.bounds.width / 5;
     var horizontalMidpoint = this.bounds.y + this.bounds.height /5;
@@ -469,7 +471,6 @@ function QuadTree(boundbox, lvl) {
         index = 3;
       }
     }
-  //  console.log("index", index)
 
     	return index;
   };
@@ -509,6 +510,8 @@ function QuadTree(boundbox, lvl) {
 
 function Game() {
   this.init = function() {
+    this.score = 0;
+    this.lives = 4;
 
     this.bgCanvas = document.getElementById("background");
     this.claudeCanvas = document.getElementById("claude");
@@ -611,6 +614,8 @@ function detectCollision() {
 				 objects[x].y + objects[x].height > obj[y].y)) {
 				objects[x].isColliding = true;
 				obj[y].isColliding = true;
+
+
 			}
 		}
 	}
@@ -619,9 +624,8 @@ function detectCollision() {
 KEY_CODES = {
   32: 'space',
   37: 'left',
-  38: 'up',
-  39: 'right',
-  40: 'down',
+  39: 'right'
+
 }
 
 // Creates the array to hold the KEY_CODES and sets all their values
@@ -639,7 +643,6 @@ for (code in KEY_CODES) {
  * key it was.
  */
 document.onkeydown = function(e) {
-//  console.log("heeee")
   // Firefox and opera use charCode instead of keyCode to
   // return which key was pressed.
   var keyCode = (e.keyCode) ? e.keyCode : e.charCode;
@@ -648,6 +651,24 @@ document.onkeydown = function(e) {
 	KEY_STATUS[KEY_CODES[keyCode]] = true;
   }
 }
+
+$("button")
+.mousedown(function(e) {
+  e.preventDefault();
+  var keyCode = e.target.value;
+  if (KEY_CODES[keyCode]) {
+  e.preventDefault();
+  KEY_STATUS[KEY_CODES[keyCode]] = true;
+  }
+})
+.mouseup(function(e) {
+  e.preventDefault();
+  var keyCode = e.target.value;
+  if (KEY_CODES[keyCode]) {
+    e.preventDefault();
+    KEY_STATUS[KEY_CODES[keyCode]] = false;
+  }
+  });
 /**
  * Sets up the document to listen to ownkeyup events (fired when
  * any key on the keyboard is released). When a key is released,

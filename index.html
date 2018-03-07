@@ -1,6 +1,11 @@
 <html>
 	<head>
 		<title>Space Shooter Demo</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
+		<script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
+
 		<style>
 			canvas {
 				position: absolute;
@@ -17,6 +22,75 @@
 			#ship {
 				z-index: 0;
 			}
+			#score {
+				width: 600px;
+				height: 30px;
+				background: black;
+				position: absolute;
+				top: 360px;
+				left: 0;
+				color: rgb(9, 184, 0);
+				font-family: 'Press Start 2P', cursive;
+				text-align: center;
+			}
+			#controller {
+				width: 600px;
+				height: 60px;
+				position: absolute;
+				top: 390px;
+				text-align: center;
+			}
+			#left, #right, #fire {
+				border: none;
+
+			}
+			#left {
+				font-size: 40px;
+				color: blue;
+				position: absolute;
+				left: 90px;
+				top: 12px;
+
+
+			}
+			#right {
+				font-size: 40px;
+				color: blue;
+				position: absolute;
+				left: 150px;
+				top: 12px;
+
+
+
+			}
+
+			#left svg, #right svg {
+				border-style: outset;
+				border-radius: 30px;
+				border-color: blue;
+
+			}
+
+			#left svg:active, #right svg:active {
+				border-style: inset;
+				border-radius: 30px;
+			}
+			#fire {
+				color: white;
+				background-color: red;
+				font-size: 20px;
+				border-style: outset;
+				border-radius: 200px;
+				border-color: red;
+				padding: 8px 7px 8px 7px;
+				position: absolute;
+				margin-left: 40px;
+				top: 15px;
+
+			}
+			#fire:active {
+				border-style: inset;
+			}
 		</style>
 	</head>
 	<body>
@@ -31,6 +105,16 @@
          one forth the screen.) -->
 		<canvas id="claude" width="600" height="360">
 		</canvas>
+		<div id="score">
+				score: <span id="your-score"></span>
+				lives: <span id="your-lives"></span>
+		</div>
+		<div id="controller">
+			<button id="left" value=37><i class="fas fa-arrow-circle-left"></i></button>
+			<button id="right" value=39><i class="fas fa-arrow-circle-right"></i></button>
+			<button id="fire" value=32>fire</button>
+		</div>
 	</body>
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.js" integrity="sha256-fNXJFIlca05BIO2Y5zh1xrShK3ME+/lYZ0j+ChxX2DA=" crossorigin="anonymous"></script>
   <script src="assets/js/logic.js"></script>
 </html>
