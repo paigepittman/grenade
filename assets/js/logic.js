@@ -48,7 +48,7 @@ var images = new function() {
   }
 
 
-   this.background.src = "assets/images/background.PNG";
+   this.background.src = "assets/images/background.png";
 
   this.vonStroke.src = "assets/images/claude.PNG";
 
