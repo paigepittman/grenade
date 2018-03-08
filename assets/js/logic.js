@@ -18,6 +18,7 @@ var images = new function() {
   this.shot = new Image();
   this.grenade = new Image();
   this.plane = new Image();
+  //this.gameover = new Image();
 
   var imageTotal = 5;
   var loadedImg = 0;
@@ -47,16 +48,18 @@ var images = new function() {
   }
 
 
-   this.background.src = "assets/images/background.png";
+  this.background.src = "assets/images/background.png";
 
-  this.vonStroke.src = "assets/images/claude.PNG";
+  this.vonStroke.src = "assets/images/claude-pixel.PNG";
 
-  this.shot.src = "assets/images/flame.gif";
+  this.shot.src = "assets/images/pix-shot.png";
 
 
-this.grenade.src = "assets/images/grenade.PNG";
+  this.grenade.src = "assets/images/pix-grenade.PNG";
 
-this.plane.src = "assets/images/plane.PNG";
+  this.plane.src = "assets/images/plane-pix.PNG";
+
+  //this.gameover.src = "assets/images/game-over.gif";
 
   };
 
@@ -106,8 +109,8 @@ function Pool(max) {
           for (var i=0; i < size; i++) {
            var shot = new Shot("hero");
            shot.init(0,0, 20, 20);
-           shot.collidableWith = "plane";
-           shot.type = "claude";
+           shot.collidableWith = "grenade";
+           shot.type = "hero";
            pool[i] = shot;
           }
      }
@@ -173,12 +176,9 @@ function Shot(obj) {
     if (this.isColliding) {
       console.log(type)
       if (type === "grenade") {
-        lives--;
-        $("#your-lives").html(lives);
         return true;
       }
       else if (type === "hero") {
-        score++;
         $("#your-score").html(score);
         return true;
       }
@@ -249,6 +249,18 @@ function VonStroke() {
     if (!this.isColliding) {
       this.draw();
     }
+    else if (this.isColliding && lives > 0) {
+      this.context.clearRect(this.x, this.y, this.width, this.height);
+      this.x = game.claudeCanvas.width/2;
+      this.draw();
+      this.isColliding = false;
+    }
+
+    else if (this.isColliding && lives === 0) {
+      this.context.clearRect(this.x, this.y, this.width, this.height);
+      ///gameOver();
+    }
+
     if (KEY_STATUS.space && count >= firingRate) {
       this.shoot();
       count = 0;
@@ -261,7 +273,19 @@ function VonStroke() {
 
 VonStroke.prototype = new Draw();
 
+// function gameOver() {
+//   this.speed = 0;
+//   this.draw = function() {
+//     this.context.drawImage(images.gameover, this.x, this.y);
+//   }
+// }
 
+//gameOver.prototype = new Draw();
+function gameOver() {
+  console.log("hello")
+  var gameoverDiv = $("#gameover");
+     gameoverDiv.css("visibility", "visible");
+}
 
 function bgImage() {
 
@@ -512,23 +536,26 @@ function Game() {
     this.score = 0;
     this.lives = 4;
 
-    var left = document.getElementById("left");
-    var right = document.getElementById("right");
-    var fire = document.getElementById("fire");
-
 
     this.bgCanvas = document.getElementById("background");
     this.claudeCanvas = document.getElementById("claude");
     this.mainCanvas = document.getElementById("main");
+  //  this.gameoverCanvas = document.getElementById("gameover");
 
     if (this.bgCanvas.getContext) {
       this.bgContext = this.bgCanvas.getContext("2d");
       this.claudeContext = this.claudeCanvas.getContext("2d");
       this.mainContext = this.mainCanvas.getContext("2d");
+    //  this.gameoverContext = this.gameoverCanvas.getContext("2d");
 
       bgImage.prototype.context = this.bgContext;
       bgImage.prototype.canvasWidth = this.bgCanvas.width;
       bgImage.prototype.canvasHeight = this.bgCanvas.height;
+
+      // gameOver.prototype.context = this.gameoverContext;
+      // gameOver.prototype.canvasHeight = this.gameoverCanvas.height;
+      // gameOver.prototype.canvasWidth = this.gameoverCanvas.width;
+
 
       VonStroke.prototype.context = this.claudeContext;
       VonStroke.prototype.canvasWidth = this.claudeCanvas.width;
@@ -569,6 +596,8 @@ function Game() {
       };
       this.grenadePool = new Pool(5);
       this.grenadePool.init("grenade");
+      //this.gameover = new gameOver();
+      //this.gameover.init(0,0);
 
       this.quadTree = new QuadTree({x:0,y:0,width:this.mainCanvas.width,height:this.mainCanvas.height});
 
@@ -619,7 +648,20 @@ function detectCollision() {
 				 objects[x].y + objects[x].height > obj[y].y)) {
 				objects[x].isColliding = true;
 				obj[y].isColliding = true;
+        ///obj[y] refers to the one that is being damaged by the collision, objects[x] refers to the one doing the damage
+          //console.log(obj[y], objects[x]);
+          ///add if statements here to update lives and scores
+          if (obj[y].type === "grenade" && objects[x].type === "hero") {
+            score++;
+            $("#your-score").html(score);
+            $("#your-lives").html(lives);
 
+          }
+          else if (obj[y].type === "claude" && objects[x].type === "grenade") {
+            lives--;
+            $("#your-score").html(score);
+            $("#your-lives").html(lives);
+          }
 
 			}
 		}
@@ -706,13 +748,3 @@ window.requestAnimFrame = (function(){
 				window.setTimeout(callback, 1000 / 60);
 			};
 })();
-
-
-
-
-// .vmousedown(function(e) {
-
-// })
-// .vmouseup(function(e) {
-
-//   })
