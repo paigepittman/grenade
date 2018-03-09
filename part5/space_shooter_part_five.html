@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Grenade</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
+		<script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+		<style>
+			canvas {
+				position: absolute;
+				top: 0px;
+				left: 0px;
+				background: transparent;
+			}
+			#background {
+				z-index: -2;
+			}
+			#main {
+				z-index: -1;
+			}
+			#ship {
+				z-index: 0;
+			}
+			.score {
+				position: absolute;
+				top: 5px;
+				left: 480px;
+				color: #FF7F00;
+				font-family: Helvetica, sans-serif;
+				cursor: default;
+			}
+			.game-over {
+				border-style: solid;
+				border-width: 10px;
+				border-radius: 5px;
+				background: black;
+				border-color: rgb(15, 204, 5);
+				padding: 55px;
+				color: rgb(9, 184, 0);
+				font-family: 'Press Start 2P', cursive;
+				position: absolute;
+				top: 70px;
+				left: 110px;
+				color: #FF7F00;
+				font-family: Helvetica, sans-serif;
+				font-size: 30px;
+				cursor: default;
+				display: none;
+			}
+
+			#game-over {
+				color: rgb(9, 184, 0);
+				font-family: 'Press Start 2P', cursive;
+			}
+			.game-over span {
+				color: rgb(9, 184, 0);
+				font-family: 'Press Start 2P', cursive;
+				font-size: 20px;
+				cursor: pointer;
+				position: relative;
+				left: 50px;
+			}
+			.game-over span:hover {
+				color: #FFD700;
+			}
+			.loading {
+				position: absolute;
+				top: 100px;
+				left: 210px;
+				color: #FF7F00;
+				font-family: Helvetica, sans-serif;
+				font-size: 30px;
+				cursor: default;
+			}
+			#halfway {
+				display: none;
+			}
+
+			#score {
+				width: 600px;
+				height: 30px;
+				background: black;
+				position: absolute;
+				top: 360px;
+				left: 0;
+				color: rgb(9, 184, 0);
+				font-family: 'Press Start 2P', cursive;
+				text-align: center;
+			}
+
+			#controller {
+				visibility: hidden;
+				width: 600px;
+				max-width: 100%;
+				height: 60px;
+				position: absolute;
+				top: 390px;
+				text-align: center;
+			}
+			#left, #right, #fire {
+				border: none;
+
+			}
+			#left {
+				font-size: 40px;
+				color: blue;
+				position: absolute;
+				left: 90px;
+				top: 12px;
+
+
+			}
+			#right {
+				font-size: 40px;
+				color: blue;
+				position: absolute;
+				left: 150px;
+				top: 12px;
+
+
+
+			}
+
+			#left svg, #right svg {
+				border-style: outset;
+				border-radius: 30px;
+				border-color: blue;
+
+			}
+
+			#left svg:active, #right svg:active {
+				border-style: inset;
+				border-radius: 30px;
+			}
+			#fire {
+				color: white;
+				background-color: red;
+				font-size: 20px;
+				border-style: outset;
+				border-radius: 200px;
+				border-color: red;
+				padding: 8px 7px 8px 7px;
+				position: absolute;
+				margin-left: 40px;
+				top: 15px;
+
+			}
+			#fire:active {
+				border-style: inset;
+			}
+
+			@media only screen and (max-width: 599px) {
+				body {
+					width: 100%;
+				}
+    canvas {
+        max-width: 100%;
+    }
+		#score {
+			max-width: 100%;
+		}
+		#controller {
+			visibility: visible;
+		}
+}
+
+		</style>
+	</head>
+	<body>
+		<!-- The canvas for the panning background -->
+		<canvas id="background" width="600" height="360">
+			Your browser does not support canvas. Please try again with a different browser.
+		</canvas>
+		<!-- The canvas for all enemy ships and bullets -->
+		<canvas id="main" width="600" height="360">
+		</canvas>
+		<!-- The canvas the ship uses (can only move up
+         one forth the screen. -->
+		<canvas id="ship" width="600" height="360">
+		</canvas>
+		<div id="score">
+				score: <span id="your-score">0</span>
+				lives: <span id="your-lives">4</span>
+		</div>
+		<div id="controller">
+			<button id="left" ontouchstart="touchdown(left)" ontouchend="touchoff(left)" value=37><i class="fas fa-arrow-circle-left"></i></button>
+			<button id="right" ontouchstart="touchdown(right)" ontouchend="touchoff(right)" value=39><i class="fas fa-arrow-circle-right"></i></button>
+			<button id="fire" ontouchstart="touchdown(fire)" ontouchend="touchoff(fire)" value=32>fire</button>
+		</div>
+		<div id="halfway">You're halfway to saving the world!</div>
+		<div class="game-over" id="game-over">GAME OVER<p><span onclick="game.restart()">Restart</span></p></div>
+		<div class="loading" id="loading">LOADING...<p>Please wait</p></div>
+			<script src="https://code.jquery.com/jquery-3.3.1.slim.js" integrity="sha256-fNXJFIlca05BIO2Y5zh1xrShK3ME+/lYZ0j+ChxX2DA=" crossorigin="anonymous"></script>
+		<script src="space_shooter_part_five.js"></script>
+	</body>
+</html>
