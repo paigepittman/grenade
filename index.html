@@ -41,6 +41,13 @@
 				background: rgba(0,0,0,0);
 			}
 
+			.game-over span {
+			font-size: 20px;
+			cursor: pointer;
+			position: relative;
+			left: 50px;
+		}
+
 			#score {
 				width: 600px;
 				height: 30px;
@@ -52,6 +59,7 @@
 				font-family: 'Press Start 2P', cursive;
 				text-align: center;
 			}
+			
 			#controller {
 				visibility: hidden;
 				width: 600px;
@@ -141,9 +149,6 @@
          one forth the screen.) -->
 		<canvas id="claude" width="600" height="360">
 		</canvas>
-
-		<div id="gameover"></div>
-
 		<div id="score">
 				score: <span id="your-score">0</span>
 				lives: <span id="your-lives">4</span>
@@ -153,6 +158,8 @@
 			<button id="right" ontouchstart="touchdown(right)" ontouchend="touchoff(right)" value=39><i class="fas fa-arrow-circle-right"></i></button>
 			<button id="fire" ontouchstart="touchdown(fire)" ontouchend="touchoff(fire)" value=32>fire</button>
 		</div>
+		<div class="game-over" id="game-over">GAME OVER<p><span onclick="game.restart()">Restart</span></p></div>
+
 	</body>
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.js" integrity="sha256-fNXJFIlca05BIO2Y5zh1xrShK3ME+/lYZ0j+ChxX2DA=" crossorigin="anonymous"></script>
   <script src="assets/js/logic.js"></script>

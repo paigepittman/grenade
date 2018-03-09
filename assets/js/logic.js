@@ -6,9 +6,7 @@ var game = new Game();
 
 
 function init() {
-  if (game.init()) {
-    game.startGame();
-  }
+   game.init();
 };
 
 
@@ -18,6 +16,7 @@ var images = new function() {
   this.shot = new Image();
   this.grenade = new Image();
   this.plane = new Image();
+  this.explosion = new Image();
   //this.gameover = new Image();
 
   var imageTotal = 5;
@@ -59,6 +58,8 @@ var images = new function() {
 
   this.plane.src = "assets/images/plane-pix.PNG";
 
+  this.explosion.src = "assets/images/explosion.png";
+
   //this.gameover.src = "assets/images/game-over.gif";
 
   };
@@ -89,6 +90,47 @@ function Draw() {
   }
 };
 
+function SoundPool(maxSize) {
+	var size = maxSize; // Max assets/sounds allowed in the pool
+	var pool = [];
+	this.pool = pool;
+	var currSound = 0;
+	/*
+	 * Populates the pool array with the given sound
+	 */
+	this.init = function(object) {
+		if (object == "laser") {
+			for (var i = 0; i < size; i++) {
+				// Initalize the sound
+				laser = new Audio("assets/sounds/laser.wav");
+				laser.volume = .12;
+				laser.load();
+				pool[i] = laser;
+			}
+		}
+		else if (object == "explosion") {
+			for (var i = 0; i < size; i++) {
+				var explosion = new Audio("assets/sounds/explosion.wav");
+				explosion.volume = .1;
+				explosion.load();
+				pool[i] = explosion;
+			}
+		}
+	};
+	/*
+	 * Plays a sound
+	 */
+	this.get = function() {
+		if(pool[currSound].currentTime == 0 || pool[currSound].ended) {
+			pool[currSound].play();
+		}
+		currSound = (currSound + 1) % size;
+	};
+}
+
+
+
+
 function Pool(max) {
 
   var size = max;
@@ -108,7 +150,7 @@ function Pool(max) {
     if (obj === "hero") {
           for (var i=0; i < size; i++) {
            var shot = new Shot("hero");
-           shot.init(0,0, 20, 20);
+           shot.init(0,0, images.shot.width, images.shot.height);
            shot.collidableWith = "grenade";
            shot.type = "hero";
            pool[i] = shot;
@@ -144,6 +186,7 @@ function Pool(max) {
   this.animate = function() {
     for (var i = 0; i < size; i++) {
       if (pool[i].alive) {
+        //console.log(pool[i])
         if (pool[i].draw()) {
           pool[i].clear();
           pool.push((pool.splice(i, 1))[0]);
@@ -155,6 +198,14 @@ function Pool(max) {
     }
   };
 };
+
+function checkReadyState() {
+	if (game.gameOverAudio.readyState === 4 && game.backgroundAudio.readyState === 4) {
+		window.clearInterval(game.checkAudio);
+		// document.getElementById('loading').style.display = "none";
+		game.startGame();
+	}
+}
 
 
 function Shot(obj) {
@@ -169,17 +220,28 @@ function Shot(obj) {
     this.alive = true;
   };
 
+  this.explode = function() {
+    this.context.drawImage(images.explosion, this.x, this.y);
+    var shot = this;
+    setTimeout(function() {
+      console.log(shot)
+      shot.context.clearRect(shot.x, shot.y, images.explosion.width, images.explosion.height);
+      //claude.isColliding = false;
+    }, 2000)
+  }
+
   this.draw = function() {
     this.context.clearRect(this.x, this.y, this.width, this.height);
     this.y -= this.speed;
 
     if (this.isColliding) {
-      console.log(type)
+      //console.log(type)
       if (type === "grenade") {
+        //console.log(this.width)
         return true;
       }
       else if (type === "hero") {
-        $("#your-score").html(score);
+        //console.log(this.width)
         return true;
       }
     }
@@ -191,7 +253,7 @@ function Shot(obj) {
     }
     else {
       if (type === "hero") {
-        this.context.drawImage(images.shot, this.x, this.y, 20, 20);
+        this.context.drawImage(images.shot, this.x, this.y);
       }
       else if (type === "grenade") {
         this.context.drawImage(images.grenade, this.x, this.y);
@@ -221,6 +283,7 @@ function VonStroke() {
   this.type = "claude";
   var firingRate = 15;
   var count = 0;
+
   this.draw = function() {
     this.context.drawImage(images.vonStroke, this.x, this.y, images.vonStroke.width, images.vonStroke.height);
 
@@ -258,7 +321,7 @@ function VonStroke() {
 
     else if (this.isColliding && lives === 0) {
       this.context.clearRect(this.x, this.y, this.width, this.height);
-      ///gameOver();
+      gameOver();
     }
 
     if (KEY_STATUS.space && count >= firingRate) {
@@ -267,7 +330,9 @@ function VonStroke() {
     }
   }
   this.shoot = function() {
-    this.bulletPool.get(this.x+30, this.y, 3);
+    this.bulletPool.get(this.x+12, this.y, 3);
+
+    game.laser.get();
   }
 }
 
@@ -284,7 +349,7 @@ VonStroke.prototype = new Draw();
 function gameOver() {
   console.log("hello")
   var gameoverDiv = $("#gameover");
-     gameoverDiv.css("visibility", "visible");
+     //gameoverDiv.css("visibility", "visible");
 }
 
 function bgImage() {
@@ -351,11 +416,12 @@ function Plane() {
         return false;
     }
     else {
+      game.explosion.get();
       return true;
     }
   };
   this.shoot = function() {
-    game.grenadePool.get(this.x, this.y+20, -1.2);
+    game.grenadePool.get(this.x, this.y+20, -1.5);
   }
 
   this.clear = function() {
@@ -601,6 +667,33 @@ function Game() {
 
       this.quadTree = new QuadTree({x:0,y:0,width:this.mainCanvas.width,height:this.mainCanvas.height});
 
+
+      // Audio files
+			this.laser = new SoundPool(10);
+			this.laser.init("laser");
+
+			this.explosion = new SoundPool(20);
+			this.explosion.init("explosion");
+
+			this.backgroundAudio = new Audio("assets/sounds/kick_shock.wav");
+			this.backgroundAudio.loop = true;
+			this.backgroundAudio.volume = .25;
+			this.backgroundAudio.load();
+
+			this.gameOverAudio = new Audio("assets/sounds/game_over.wav");
+			this.gameOverAudio.loop = true;
+			this.gameOverAudio.volume = .25;
+			this.gameOverAudio.load();
+
+			this.checkAudio = window.setInterval(function(){checkReadyState()},1000);
+
+
+
+
+
+
+
+
       return true;
     }
     else {
@@ -609,6 +702,7 @@ function Game() {
   }
   this.startGame = function() {
     this.vonstroke.draw();
+    this.backgroundAudio.play();
     animate();
   }
 };
@@ -653,6 +747,7 @@ function detectCollision() {
           ///add if statements here to update lives and scores
           if (obj[y].type === "grenade" && objects[x].type === "hero") {
             score++;
+            obj[y].explode();
             $("#your-score").html(score);
             $("#your-lives").html(lives);
 
