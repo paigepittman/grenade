@@ -49,14 +49,14 @@ var images = new function() {
 
   this.background.src = "assets/images/background.png";
 
-  this.vonStroke.src = "assets/images/claude-pixel.PNG";
+  this.vonStroke.src = "assets/images/claude-pixel.png";
 
   this.shot.src = "assets/images/pix-shot.png";
 
 
-  this.grenade.src = "assets/images/pix-grenade.PNG";
+  this.grenade.src = "assets/images/pix-grenade.png";
 
-  this.plane.src = "assets/images/plane-pix.PNG";
+  this.plane.src = "assets/images/plane-pix.png";
 
   this.explosion.src = "assets/images/explosion.png";
 
