@@ -1,141 +1,12 @@
+<!DOCTYPE html>
 <html>
 	<head>
 		<title>Grenade</title>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1" />
 		<link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
 		<script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+		<link href="assets/style/style.css" rel="stylesheet"/>
 
-
-		<style>
-			body {
-				width: 100%;
-
-			}
-			canvas {
-				position: absolute;
-				top: 0px;
-				left: 0px;
-				background: transparent;
-
-			}
-
-			#background {
-				z-index: -2;
-			}
-			#main {
-				z-index: -1;
-			}
-			#ship {
-				z-index: 0;
-			}
-			#gameover {
-				z-index: 1;
-				width: 400px;
-				height: 350px;
-				border-style: solid;
-				border-width: 10px;
-				margin:auto;
-				border-radius: 5px;
-				border-color: rgb(15, 204, 5);
-				visibility: hidden;
-				background: rgba(0,0,0,0);
-			}
-
-			.game-over span {
-			font-size: 20px;
-			cursor: pointer;
-			position: relative;
-			left: 50px;
-		}
-
-			#score {
-				width: 600px;
-				height: 30px;
-				background: black;
-				position: absolute;
-				top: 360px;
-				left: 0;
-				color: rgb(9, 184, 0);
-				font-family: 'Press Start 2P', cursive;
-				text-align: center;
-			}
-
-			#controller {
-				visibility: hidden;
-				width: 600px;
-				max-width: 100%;
-				height: 60px;
-				position: absolute;
-				top: 390px;
-				text-align: center;
-			}
-			#left, #right, #fire {
-				border: none;
-
-			}
-			#left {
-				font-size: 40px;
-				color: blue;
-				position: absolute;
-				left: 90px;
-				top: 12px;
-
-
-			}
-			#right {
-				font-size: 40px;
-				color: blue;
-				position: absolute;
-				left: 150px;
-				top: 12px;
-
-
-
-			}
-
-			#left svg, #right svg {
-				border-style: outset;
-				border-radius: 30px;
-				border-color: blue;
-
-			}
-
-			#left svg:active, #right svg:active {
-				border-style: inset;
-				border-radius: 30px;
-			}
-			#fire {
-				color: white;
-				background-color: red;
-				font-size: 20px;
-				border-style: outset;
-				border-radius: 200px;
-				border-color: red;
-				padding: 8px 7px 8px 7px;
-				position: absolute;
-				margin-left: 40px;
-				top: 15px;
-
-			}
-			#fire:active {
-				border-style: inset;
-			}
-
-			@media only screen and (max-width: 599px) {
-				body {
-					width: 100%;
-				}
-    canvas {
-        max-width: 100%;
-    }
-		#score {
-			max-width: 100%;
-		}
-		#controller {
-			visibility: visible;
-		}
-}
-		</style>
 	</head>
 	<body>
 		<!-- The canvas for the panning background -->
@@ -146,8 +17,8 @@
 		<canvas id="main" width="600" height="360">
 		</canvas>
 		<!-- The canvas the ship uses (can only move up
-         one forth the screen.) -->
-		<canvas id="claude" width="600" height="360">
+         one forth the screen. -->
+		<canvas id="ship" width="600" height="360">
 		</canvas>
 		<div id="score">
 				score: <span id="your-score">0</span>
@@ -158,9 +29,11 @@
 			<button id="right" ontouchstart="touchdown(right)" ontouchend="touchoff(right)" value=39><i class="fas fa-arrow-circle-right"></i></button>
 			<button id="fire" ontouchstart="touchdown(fire)" ontouchend="touchoff(fire)" value=32>fire</button>
 		</div>
+		<div id="halfway">You're halfway to saving the world!</div>
 		<div class="game-over" id="game-over">GAME OVER<p><span onclick="game.restart()">Restart</span></p></div>
-
+			<div class="you-win" id="you-win">You just helped Claude Vonstroke and EPROM save mankind!<p><span onclick="game.restart()">Restart</span></p></div>
+		<div class="loading" id="loading">LOADING...<p>Please wait</p></div>
+			<script src="https://code.jquery.com/jquery-3.3.1.slim.js" integrity="sha256-fNXJFIlca05BIO2Y5zh1xrShK3ME+/lYZ0j+ChxX2DA=" crossorigin="anonymous"></script>
+		<script src="assets/js/game.js"></script>
 	</body>
-	<script src="https://code.jquery.com/jquery-3.3.1.slim.js" integrity="sha256-fNXJFIlca05BIO2Y5zh1xrShK3ME+/lYZ0j+ChxX2DA=" crossorigin="anonymous"></script>
-  <script src="assets/js/logic.js"></script>
 </html>
