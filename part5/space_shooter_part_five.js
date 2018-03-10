@@ -68,10 +68,11 @@ var imageRepository = new function() {
 
 	// Set images src
 	this.background.src = "imgs/background.png";
-	this.spaceship.src = "imgs/claude-pixel.png";
+	this.spaceship.src = "imgs/claude-new.png";
 	this.bullet.src = "imgs/bullet.png";
-	this.enemy.src = "imgs/plane.png";
-	this.enemyBullet.src = "imgs/pix-grenade.png";
+	// this.enemy.srcArray = ["imgs/yellow-plane.png", "imgs/blue-plane.png, imgs/orange-plane.png"];
+	this.enemy.src = "imgs/yellow-plane.png";
+	this.enemyBullet.src = "imgs/grenade-new.png";
 }
 
 
@@ -161,19 +162,10 @@ function Bullet(object) {
 	this.draw = function() {
 		this.context.clearRect(this.x-1, this.y-1, this.width+2, this.height+2);
 		this.y -= this.speed;
-
 		if (this.isColliding) {
-			if (game.playerLives > 0) {
-				game.playerLives--;
-				if (game.playerLives === 0) {
-					game.ship.alive = false;
-					 game.ship.context.clearRect(game.ship.x, game.ship.y, game.ship.width, game.ship.height);
-					game.gameOver();
-				}
-			}
-
 			return true;
 		}
+
 		else if (self === "bullet" && this.y <= 0 - this.height) {
 			return true;
 		}
@@ -597,7 +589,7 @@ Ship.prototype = new Drawable();
  * Create the Enemy ship object.
  */
 function Enemy() {
-	var percentFire = .01;
+	var percentFire = .001;
 	var chance = 0;
 	this.alive = false;
 	this.collidableWith = "bullet";
@@ -606,6 +598,8 @@ function Enemy() {
 	/*
 	 * Sets the Enemy values
 	 */
+
+	 ///FIX COLOR PLANES HEREEEEEEEEE
 	this.spawn = function(x, y, speed) {
 		this.x = x;
 		this.y = y;
@@ -613,9 +607,9 @@ function Enemy() {
 		this.speedX = 0;
 		this.speedY = speed;
 		this.alive = true;
-		this.leftEdge = this.x - 90;
-		this.rightEdge = this.x + 90;
-		this.bottomEdge = this.y + 140;
+		this.leftEdge = this.x - 100;
+		this.rightEdge = this.x + 100;
+		this.bottomEdge = this.y + 100;
 	};
 
 	/*
@@ -644,13 +638,14 @@ function Enemy() {
 			// Enemy has a chance to shoot every movement
 			chance = Math.floor(Math.random()*101);
 			if (chance/100 < percentFire) {
+				//console.log(chance/100, percentFire)
 				this.fire();
 			}
 
 			return false;
 		}
 		else {
-			game.playerScore += 10;
+			game.playerScore += 20;
 			game.explosion.get();
 			return true;
 		}
@@ -731,12 +726,12 @@ function Game() {
 			this.ship = new Ship();
 			// Set the ship to start near the bottom middle of the canvas
 			this.shipStartX = this.shipCanvas.width/2 - imageRepository.spaceship.width;
-			this.shipStartY = 290;
+			this.shipStartY = 280;
 			this.ship.init(this.shipStartX, this.shipStartY,
 			               imageRepository.spaceship.width, imageRepository.spaceship.height);
 
 			// Initialize the enemy pool object
-			this.enemyPool = new Pool(30);
+			this.enemyPool = new Pool(5);
 			this.enemyPool.init("enemy");
 			this.spawnWave();
 
@@ -755,7 +750,7 @@ function Game() {
 			this.explosion = new SoundPool(20);
 			this.explosion.init("explosion");
 
-			this.backgroundAudio = new Audio("sounds/kick_shock.wav");
+			this.backgroundAudio = new Audio("../../grenade.wav") || new Audio("sounds/kick_shock.wav");
 			this.backgroundAudio.loop = false;
 			this.backgroundAudio.volume = .25;
 			this.backgroundAudio.currentTime = 10;
@@ -831,8 +826,8 @@ function Game() {
 	this.gameOver = function() {
 
 		this.backgroundAudio.pause();
-		this.gameOverAudio.currentTime = 0;
-		this.gameOverAudio.play();
+		//this.gameOverAudio.currentTime = 0;
+		//this.gameOverAudio.play();
 		this.ended = true;
 		document.getElementById('game-over').style.display = "block";
 	};
@@ -940,6 +935,12 @@ function animate() {
 	if (parseInt(game.backgroundAudio.currentTime) === parseInt(game.backgroundAudio.duration/2)) {
 		game.halfway();
 	}
+
+	if (game.playerLives === 0) {
+		game.ship.alive = false;
+		game.gameOver()
+
+		}
 }
 
 function detectCollision() {
@@ -959,6 +960,16 @@ function detectCollision() {
 				 objects[x].y + objects[x].height > obj[y].y)) {
 				objects[x].isColliding = true;
 				obj[y].isColliding = true;
+
+				if (obj[y].type === "enemyBullet" && objects[x].type === "bullet") {
+					game.playerScore += 10;
+
+
+				}
+				else if (obj[y].type === "ship" && objects[x].type === "enemyBullet" && game.playerLives > 0) {
+					game.playerLives--;
+
+				}
 			}
 		}
 	}
@@ -970,9 +981,7 @@ function detectCollision() {
 KEY_CODES = {
   32: 'space',
   37: 'left',
-  38: 'up',
-  39: 'right',
-  40: 'down',
+  39: 'right'
 }
 
 // Creates the array to hold the KEY_CODES and sets all their values
