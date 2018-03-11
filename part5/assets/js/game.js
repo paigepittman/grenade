@@ -885,7 +885,7 @@ function SoundPool(maxSize) {
 		if (object == "laser") {
 			for (var i = 0; i < size; i++) {
 				// Initalize the object
-				laser = new Audio("assets/sounds/hero-fire.wav");
+				laser = new Audio("assets/sounds/Powerup-hit.wav");
 				laser.volume = .12;
 				laser.load();
 				pool[i] = laser;
@@ -894,7 +894,7 @@ function SoundPool(maxSize) {
 		else if (object == "explosion") {
 			for (var i = 0; i < size; i++) {
 				var explosion = new Audio("assets/sounds/Powerup-hit.wav");
-				explosion.volume = .12;
+				explosion.volume = .3;
 				explosion.load();
 				pool[i] = explosion;
 			}
