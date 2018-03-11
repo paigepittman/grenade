@@ -5,6 +5,13 @@ canvas {
   background: transparent;
 }
 
+.main-container {
+  width: 600px;
+  margin:auto;
+  max-width: 100%;
+  height: 360px;
+}
+
 #background {
   z-index: -2;
 }
@@ -27,19 +34,18 @@ canvas {
 }
 
 .game-over, .you-win {
-  border-style: solid;
-  border-width: 10px;
-  border-radius: 5px;
-  background: black;
-  border-color: rgb(15, 204, 5);
-  padding: 55px;
+  /* border-style: solid; */
+  /* border-width: 10px;
+  border-radius: 5px; */
+  /* background: black; */
+  /* border-color: rgb(15, 204, 5); */
   color: rgb(9, 184, 0);
   font-family: 'Press Start 2P', cursive;
   position: absolute;
-  top: 8%;
-  left: 18%;
+  left: 0;
+  top: 20%;
   color: #FF7F00;
-  width: 40%;
+  width: inherit;
   height: 20%;
   font-size: large;
   cursor: default;
@@ -49,6 +55,7 @@ canvas {
 #game-over, #you-win {
   color: rgb(9, 184, 0);
   font-family: 'Press Start 2P', cursive;
+  text-align: center;
 }
 
 .game-over span, .you-win span {
@@ -57,7 +64,7 @@ canvas {
   font-size: 20px;
   cursor: pointer;
   position: relative;
-  left: 50px;
+
 }
 
 .game-over span:hover {
@@ -66,15 +73,30 @@ canvas {
 
 .loading {
   position: absolute;
-  top: 100px;
-  left: 210px;
-  color: #FF7F00;
-  font-family: Helvetica, sans-serif;
-  font-size: 30px;
+  left: 0;
+  color: white;
+  background: black;
+  font-family: 'Press Start 2P', cursive;
+  text-align: center;
+  width: inherit;
+  height: inherit;
   cursor: default;
 }
 
+.loading p {
+  animation: blinker 1s linear infinite;
+  margin-top: 25%;
+  font-size: 15px;
+}
+
+  @keyframes blinker {
+    50% {
+      opacity: 0;
+    }
+  }
+
 #halfway {
+  animation: blinker 1s linear infinite;
   display: none;
   font-family: 'Press Start 2P', cursive;
   color: rgb(9, 184, 0);

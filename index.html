@@ -10,6 +10,8 @@
 	</head>
 	<body>
 		<!-- The canvas for the panning background -->
+		<div class="main-container">
+
 		<canvas id="background" width="600" height="360">
 			Your browser does not support canvas. Please try again with a different browser.
 		</canvas>
@@ -32,7 +34,8 @@
 		<div id="halfway">You're halfway to saving the world!</div>
 		<div class="game-over" id="game-over">GAME OVER<p><span onclick="game.restart()">Restart</span></p></div>
 			<div class="you-win" id="you-win">You just helped Claude Vonstroke and EPROM save mankind!<p><span onclick="game.restart()">Restart</span></p></div>
-		<div class="loading" id="loading">LOADING...<p>Please wait</p></div>
+		<div class="loading" id="loading"><p>LOADING...<br /><br />Please wait</p></div>
+			</div>
 			<script src="https://code.jquery.com/jquery-3.3.1.slim.js" integrity="sha256-fNXJFIlca05BIO2Y5zh1xrShK3ME+/lYZ0j+ChxX2DA=" crossorigin="anonymous"></script>
 		<script src="assets/js/game.js"></script>
 	</body>
