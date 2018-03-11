@@ -618,7 +618,7 @@ function Enemy() {
 		this.speedY = speed;
 		this.alive = true;
 		this.leftEdge = this.x - 100;
-		this.rightEdge = this.x + 110;
+		this.rightEdge = this.x + 230;
 		this.bottomEdge = this.y + 160;
 	};
 
@@ -867,6 +867,7 @@ function checkReadyState() {
 	if (game.gameOverAudio.readyState === 4 && game.backgroundAudio.readyState === 4) {
 		window.clearInterval(game.checkAudio);
 		document.getElementById('loading').style.display = "none";
+		document.getElementById('score').style.display = "block";
 		game.start();
 		//game.timer();
 
