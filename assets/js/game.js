@@ -100,7 +100,6 @@ var imageRepository = new function() {
 	this.background.src = "assets/imgs/background.png";
 	this.bullet.src = "assets/imgs/bullet.png";
 	this.spaceship.src = "assets/imgs/claude-final.png";
-
  	this.enemy.srcArray = ["assets/imgs/yellow-plane.png", "assets/imgs/blue-plane.png", "assets/imgs/orange-plane.png"];
 	this.enemy.src = "assets/imgs/yellow-plane.png";
 	this.enemyBullet.src = "assets/imgs/grenade-new.png";
@@ -646,7 +645,7 @@ function Enemy() {
 	 ///FIX COLOR PLANES HEREEEEEEEEE
 	this.spawn = function(x, y, speed, color) {
 		//console.log(x, y, speed, color)
-
+		//edge =  this.x - game.mainCanvas.width
 		this.color = color;
 		imageRepository.enemy.src = this.color;
 		this.x = x;
@@ -819,7 +818,7 @@ function Game() {
 			this.gameOverAudio.loop = false;
 			this.gameOverAudio.volume = .25;
 			this.gameOverAudio.load();
-
+			this.loadingTime = 0;
 			this.checkAudio = window.setInterval(function(){checkReadyState()},1000);
 		}
 	};
@@ -839,7 +838,7 @@ function Game() {
 			this.enemyPool.get(x,y,2, color, lvl+1);
 			x += width + 25;
 			if (i % 6 == 0) {
-				x = 100;
+				x = 150;
 				y += spacer
 			}
 		}
@@ -909,7 +908,8 @@ function Game() {
  * Ensure the game sound has loaded before starting the game
  */
 function checkReadyState() {
-	if (game.gameOverAudio.readyState === 4 && game.backgroundAudio.readyState === 4) {
+	game.loadingTime++;
+	if (game.gameOverAudio.readyState === 4 && game.backgroundAudio.readyState === 4 && game.loadingTime===5) {
 		window.clearInterval(game.checkAudio);
 		document.getElementById('loading').style.display = "none";
 		document.getElementById('score').style.display = "block";

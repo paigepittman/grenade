@@ -92,9 +92,8 @@ canvas {
   cursor: pointer;
 }
 
-.loading p {
+#load-sign  {
   animation: blinker 1s linear infinite;
-  margin-top: 25%;
   font-size: 15px;
 }
 
@@ -110,6 +109,9 @@ canvas {
 #select {
   margin-top: 20%;
 
+}
+#mission {
+  margin-top: 25%;
 }
 
   @keyframes blinker {
