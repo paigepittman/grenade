@@ -595,7 +595,7 @@ Ship.prototype = new Drawable();
  * Create the Enemy ship object.
  */
 function Enemy() {
-	var percentFire = .001;
+	var percentFire = 2;
 	var chance = 0;
 	this.alive = false;
 	this.collidableWith = "bullet";
@@ -618,7 +618,7 @@ function Enemy() {
 		this.speedY = speed;
 		this.alive = true;
 		this.leftEdge = this.x - 100;
-		this.rightEdge = this.x + 100;
+		this.rightEdge = this.x + 110;
 		this.bottomEdge = this.y + 160;
 	};
 
@@ -643,15 +643,17 @@ function Enemy() {
 		}
 
 		if (!this.isColliding) {
+			//console.log(this)
 			this.context.drawImage(imageRepository.enemy, this.x, this.y);
-
+			var shots = 0;
 			// Enemy has a chance to shoot every movement
-			chance = Math.floor(Math.random()*101);
-			if (chance/100 < percentFire) {
-				//console.log(chance/100, percentFire)
+			chance = Math.floor(Math.random()*201);
+			//console.log(chance, percentFire)
+			if (chance === percentFire) {
+				 shots++
+				console.log(shots);
 				this.fire();
 			}
-
 			return false;
 		}
 		else {
@@ -741,7 +743,7 @@ function Game() {
 			               imageRepository.spaceship.width, imageRepository.spaceship.height);
 
 			// Initialize the enemy pool object
-			this.enemyPool = new Pool(5);
+			this.enemyPool = new Pool(4);
 			this.enemyPool.init("enemy");
 			this.waveLevel = 0;
 			this.spawnWave(this.waveLevel);
@@ -768,8 +770,8 @@ function Game() {
 			this.backgroundAudio.currentTime = 0;
 			this.backgroundAudio.load();
 
-			this.gameOverAudio = new Audio("assets/sounds/game_over.wav");
-			this.gameOverAudio.loop = true;
+			this.gameOverAudio = new Audio("assets/sounds/game-over.wav");
+			this.gameOverAudio.loop = false;
 			this.gameOverAudio.volume = .25;
 			this.gameOverAudio.load();
 
@@ -843,6 +845,9 @@ function Game() {
 	// Game over
 	this.gameOver = function(state) {
 		this.backgroundAudio.pause();
+		this.gameOverAudio.currentTime = 0;
+		this.gameOverAudio.play();
+
 		this.ended = true;
 		if (state === "loss") {
 					document.getElementById('game-over').style.display = "block";
@@ -934,7 +939,7 @@ function animate() {
 
 	// No more enemies
 	if (game.enemyPool.getPool().length === 2) {
-		if (game.waveLevel == 2) {
+		if (game.waveLevel == 2    ) {
 			game.waveLevel = 0;
 			game.spawnWave(game.waveLevel);
 		} else {
