@@ -24,7 +24,7 @@
 var game = new Game();
 
 function init() {
-	game.init();
+	//game.init();
 }
 
 
@@ -44,9 +44,39 @@ var imageRepository = new function() {
 	// Ensure all images have loaded before starting the game
 	var numImages = 5;
 	var numLoaded = 0;
+	var userStart = false;
+	var userChoice;
+
+	//if userStart is true and numloaded === numImages, start game.
+	//onclick for user choice sets user start to true and sets image src for player
+	$(".player-choice").on("click", function() {
+		var player = $(this).attr("id");
+
+		if (player === "claude") {
+			$("#claude").addClass("selected");
+			$("#eprom").removeClass("selected");
+			userChoice = "assets/imgs/claude-final.png";
+		}
+		else if (player === "eprom") {
+			$("#eprom").addClass("selected");
+			$("#claude").removeClass("selected");
+			userChoice = "assets/imgs/eprom-final.png";
+		}
+		imageRepository.spaceship.src = userChoice;
+
+
+	});
+
+	$("#start-click").on("click", function() {
+		$("#start-game").css("display", "none");
+		document.getElementById('loading').style.display = "block";
+		game.init();
+
+	})
+
 	function imageLoaded() {
 		numLoaded++;
-		if (numLoaded === numImages) {
+		if (numLoaded === numImages && userStart) {
 			window.init();
 		}
 	}
@@ -68,8 +98,9 @@ var imageRepository = new function() {
 
 	// Set images src
 	this.background.src = "assets/imgs/background.png";
-	this.spaceship.src = "assets/imgs/claude-new.png";
 	this.bullet.src = "assets/imgs/bullet.png";
+	this.spaceship.src = "assets/imgs/claude-final.png";
+
  	this.enemy.srcArray = ["assets/imgs/yellow-plane.png", "assets/imgs/blue-plane.png", "assets/imgs/orange-plane.png"];
 	this.enemy.src = "assets/imgs/yellow-plane.png";
 	this.enemyBullet.src = "assets/imgs/grenade-new.png";
@@ -538,6 +569,10 @@ function Ship() {
 		this.context.drawImage(imageRepository.spaceship, this.x, this.y, imageRepository.spaceship.width, imageRepository.spaceship.height);
 	};
 
+	this.respawn = function() {
+
+	}
+
 	this.move = function() {
 		counter++;
 		// Determine if the action is move action
@@ -564,8 +599,11 @@ function Ship() {
 			this.draw();
 		}
 		else if (this.isColliding && game.playerLives > 0) {
+			game.death.get();
 			this.context.clearRect(this.x, this.y, this.width, this.height);
 			this.x = game.mainCanvas.width/2;
+			//this.respawn();
+			//make respawning a state for hero and set to true, while true, player is drawn and cleared for a few seconds. in the if !this.colliing statement, add another condition for this state
 			this.draw();
 			this.isColliding = false;
 		}
@@ -668,6 +706,7 @@ function Enemy() {
 	 */
 	this.fire = function() {
 		game.enemyBulletPool.get(this.x+this.width/2, this.y+this.height, -2.5);
+		//game.grenade.get();
 	};
 
 	/*
@@ -738,7 +777,7 @@ function Game() {
 			this.ship = new Ship();
 			// Set the ship to start near the bottom middle of the canvas
 			this.shipStartX = this.shipCanvas.width/2 - imageRepository.spaceship.width;
-			this.shipStartY = 280;
+			this.shipStartY = 295;
 			this.ship.init(this.shipStartX, this.shipStartY,
 			               imageRepository.spaceship.width, imageRepository.spaceship.height);
 
@@ -762,6 +801,12 @@ function Game() {
 
 			this.explosion = new SoundPool(20);
 			this.explosion.init("explosion");
+
+			this.death = new SoundPool(4);
+			this.death.init("death");
+
+			this.grenade = new SoundPool(20);
+			this.grenade.init("grenade");
 
 			this.backgroundAudio = new Audio("assets/sounds/grenade.m4a")
       //|| new Audio("assets/sounds/kick_shock.wav");
@@ -903,6 +948,22 @@ function SoundPool(maxSize) {
 				explosion.volume = .12;
 				explosion.load();
 				pool[i] = explosion;
+			}
+		}
+		else if (object == "grenade") {
+			for (var i = 0; i < size; i++) {
+				var grenade = new Audio("assets/sounds/grenade-drop.wav");
+				grenade.volume = .12;
+				grenade.load();
+				pool[i] = grenade;
+			}
+		}
+		else if (object == "death") {
+			for (var i = 0; i < size; i++) {
+				var death = new Audio("assets/sounds/hero-death.wav");
+				death.volume = .12;
+				death.load();
+				pool[i] = death;
 			}
 		}
 	};

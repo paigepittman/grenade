@@ -71,7 +71,7 @@ canvas {
   color: #FFD700;
 }
 
-.loading {
+.loading, #start-game {
   position: absolute;
   left: 0;
   color: white;
@@ -83,10 +83,33 @@ canvas {
   cursor: default;
 }
 
+#start-game {
+  display: block;
+  font-size: 15px;
+}
+
+#claude, #eprom, #start-click {
+  cursor: pointer;
+}
+
 .loading p {
   animation: blinker 1s linear infinite;
   margin-top: 25%;
   font-size: 15px;
+}
+
+.loading {
+      display: none;
+}
+
+.selected {
+  animation: blinker 1s linear infinite;
+  font-size: 15px
+}
+
+#select {
+  margin-top: 20%;
+
 }
 
   @keyframes blinker {
