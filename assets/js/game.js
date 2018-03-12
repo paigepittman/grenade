@@ -23,6 +23,8 @@
  */
 var game = new Game();
 
+var blur = false;
+
 function init() {
 	//game.init();
 }
@@ -973,7 +975,9 @@ function SoundPool(maxSize) {
 	 */
 	this.get = function() {
 		if(pool[currSound].currentTime == 0 || pool[currSound].ended) {
-			pool[currSound].play();
+			if (blur === false) {
+						pool[currSound].play();
+			}
 		}
 		currSound = (currSound + 1) % size;
 	};
@@ -1144,6 +1148,19 @@ function touchoff(event) {
  * Finds the first API that works to optimize the animation loop,
  * otherwise defaults to setTimeout().
  */
+ window.onblur = function() {
+	 blur = true;
+	 game.backgroundAudio.pause();
+	 game.gameOverAudio.pause();
+
+ }
+
+ window.onfocus = function() {
+	 blue = false;
+	 game.backgroundAudio.play();
+	
+ }
+
 window.requestAnimFrame = (function(){
 	return  window.requestAnimationFrame       ||
 			window.webkitRequestAnimationFrame ||

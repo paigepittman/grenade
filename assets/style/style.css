@@ -256,7 +256,7 @@ p:focus {
   user-select: none; /* Standard syntax*/
 }
 
-@media only screen and (max-width: 599px) {
+@media only screen and (max-width: 599px) and (orientation : portrait) {
   body {
     width: 100%;
   }
@@ -287,4 +287,34 @@ p:focus {
     max-width: 100%;
     font-size: 15px;
   }
+}
+
+
+@media only screen and (max-width: 1024px) and (orientation : landscape) {
+
+  #controller {
+    visibility: visible;
+  }
+
+  canvas {
+    max-width: 600px;
+  }
+  html {
+    height: 100%;
+  }
+  body {
+    min-height: 100%;
+  }
+
+  .main-container {
+    width: 600px;
+    margin:auto;
+    max-width: 100%;
+    height: auto;
+    position: relative;
+    margin: auto;
+  }
+
+
+
 }
