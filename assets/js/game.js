@@ -1000,8 +1000,8 @@ function animate() {
 	detectCollision();
 
 	// No more enemies
-	if (game.enemyPool.getPool().length === 2) {
-		if (game.waveLevel == 2    ) {
+	if (game.enemyPool.getPool().length <= 2) {
+		if (game.waveLevel == 2) {
 			game.waveLevel = 0;
 			game.spawnWave(game.waveLevel);
 		} else {
