@@ -151,32 +151,56 @@ canvas {
   position: absolute;
   top: 390px;
   text-align: center;
+  border: none;
+  -webkit-user-select: none; /* Safari 3.1+ */
+  -moz-user-select: none; /* Firefox 2+ */
+  -ms-user-select: none; /* IE 10+ */
+  user-select: none; /* Standard syntax */
 }
 
 #left, #right, #fire {
   border: none;
+  -webkit-user-select: none; /* Safari 3.1+ */
+  -moz-user-select: none; /* Firefox 2+ */
+  -ms-user-select: none; /* IE 10+ */
+  user-select: none; /* Standard syntax */
 }
+
+#left:focus, #right:focus, #fire:focus {
+  outline: none;
+}
+
 
 #left {
   font-size: 40px;
-  color: blue;
+  background-color: rgb(133, 133, 133);
   position: absolute;
   left: 90px;
-  top: 12px;
+  top: 18px;
 }
 
 #right {
   font-size: 40px;
+  background-color: rgb(133, 133, 133);
   color: blue;
   position: absolute;
   left: 150px;
-  top: 12px;
+  top: 19px;
 }
 
-#left svg, #right svg {
+i.material-icons {
+  font-size: 40px;
+  color: rgb(70, 70, 70);
+}
+
+ button#left, button#right {
   border-style: outset;
-  border-radius: 30px;
-  border-color: blue;
+  border-color: rgb(133, 133, 133);
+  height: 40px;
+}
+
+#left i{
+  transform: rotate(180deg);
 }
 
 #left svg:active, #right svg:active {
@@ -195,10 +219,35 @@ canvas {
   position: absolute;
   margin-left: 40px;
   top: 15px;
+  border-style: inset;
+  border: none;
+  user-select: none;
+  -webkit-user-select: none; /* Safari 3.1+ */
+  -moz-user-select: none; /* Firefox 2+ */
+  -ms-user-select: none; /* IE 10+ */
+   /* Standard syntax*/
+
+}
+* {
+  user-select: none;
+  -webkit-user-select: none; /* Safari 3.1+ */
+  -moz-user-select: none; /* Firefox 2+ */
+  -ms-user-select: none;
 }
 
+p:focus {
+  outline: none;
+}
+
+
 #fire:active {
+  outline: none;
   border-style: inset;
+  border: none;
+  -webkit-user-select: none; /* Safari 3.1+ */
+  -moz-user-select: none; /* Firefox 2+ */
+  -ms-user-select: none; /* IE 10+ */
+  user-select: none; /* Standard syntax*/
 }
 
 @media only screen and (max-width: 599px) {

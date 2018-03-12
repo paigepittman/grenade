@@ -4,6 +4,8 @@
 		<title>Grenade</title>
 		<meta name="viewport" content="width=device-width,  maximum-scale=1.0, user-scalable=0, initial-scale=1" />
 		<link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
 		<script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
 		<link href="assets/style/style.css" rel="stylesheet"/>
 
@@ -20,16 +22,15 @@
 		</canvas>
 		<!-- The canvas the ship uses (can only move up
          one forth the screen. -->
-		<canvas id="ship" width="600" height="360">
+		<canvas id="ship" width="600" height="360" ontouchstart="touchdown(32)" ontouchend="touchoff(32)" >
 		</canvas>
 		<div id="score">
 				score: <span id="your-score">0</span>
 				lives: <span id="your-lives">4</span>
 		</div>
 		<div id="controller">
-			<button id="left" ontouchstart="touchdown(left)" ontouchend="touchoff(left)" value=37><i class="fas fa-arrow-circle-left"></i></button>
-			<button id="right" ontouchstart="touchdown(right)" ontouchend="touchoff(right)" value=39><i class="fas fa-arrow-circle-right"></i></button>
-			<button id="fire" ontouchstart="touchdown(fire)" ontouchend="touchoff(fire)" value=32>fire</button>
+			<button id="left" ontouchstart="touchdown(37)" ontouchend="touchoff(37)"> <i class="material-icons">forward</i></i></button>
+			<button id="right" ontouchstart="touchdown(39)" ontouchend="touchoff(39)"> <i class="material-icons">forward</i></button>
 		</div>
 		<div id="start-game">
 		<p id ="select">

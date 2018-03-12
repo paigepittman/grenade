@@ -1124,15 +1124,15 @@ document.onkeyup = function(e) {
 
 
 function touchdown(event) {
-  //console.log(event.value)
-    var keyCode = event.value;
+  console.log(event)
+    var keyCode = event;
     if (KEY_CODES[keyCode]) {
     KEY_STATUS[KEY_CODES[keyCode]] = true;
     }
   }
 
 function touchoff(event) {
-    var keyCode = event.value;
+    var keyCode = event;
     if (KEY_CODES[keyCode]) {
       KEY_STATUS[KEY_CODES[keyCode]] = false;
     }
