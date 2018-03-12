@@ -4,12 +4,17 @@ canvas {
   left: 0px;
   background: transparent;
 }
+body {
+  background-color: black;
+}
 
 .main-container {
   width: 600px;
   margin:auto;
   max-width: 100%;
   height: 360px;
+  position: relative;
+  margin: auto;
 }
 
 #background {
@@ -197,15 +202,16 @@ i.material-icons {
   border-style: outset;
   border-color: rgb(133, 133, 133);
   height: 40px;
+  padding-bottom: 40px;
 }
 
 #left i{
   transform: rotate(180deg);
 }
 
-#left svg:active, #right svg:active {
+#left button:active, #right button:active {
   border-style: inset;
-  border-radius: 30px;
+
 }
 
 #fire {
@@ -257,15 +263,28 @@ p:focus {
   canvas {
     max-width: 100%;
   }
+
+  .main-container {
+    position: absolute;
+    top: 17%;
+    left: 0;
+  }
   #score {
     max-width: 100%;
+    position: absolute;
+    top: 70%;
   }
   #controller {
     visibility: visible;
   }
   #game-over, #you-win {
-    width: 40%;
+    width: 100%;
     font-size: large;
     height: 10%;
+  }
+
+  #start-game, #loading {
+    max-width: 100%;
+    font-size: 15px;
   }
 }
