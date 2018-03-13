@@ -927,18 +927,15 @@ function checkReadyState() {
  * A sound pool to use for the sound effects
  */
 function SoundPool(maxSize) {
-	var size = maxSize; // Max bullets allowed in the pool
+	var size = maxSize;
 	var pool = [];
 	this.pool = pool;
 	var currSound = 0;
 
-	/*
-	 * Populates the pool array with the given object
-	 */
+
 	this.init = function(object) {
 		if (object == "laser") {
 			for (var i = 0; i < size; i++) {
-				// Initalize the object
 				laser = new Audio("assets/sounds/hero-fire.wav");
 				laser.volume = .12;
 				laser.load();
@@ -971,9 +968,6 @@ function SoundPool(maxSize) {
 		}
 	};
 
-	/*
-	 * Plays a sound
-	 */
 	this.get = function() {
 		if(pool[currSound].currentTime == 0 || pool[currSound].ended) {
 			if (blur === false) {
@@ -1089,35 +1083,20 @@ KEY_CODES = {
   39: 'right'
 }
 
-// Creates the array to hold the KEY_CODES and sets all their values
-// to true. Checking true/flase is the quickest way to check status
-// of a key press and which one was pressed when determining
-// when to move and which direction.
 KEY_STATUS = {};
 for (code in KEY_CODES) {
   KEY_STATUS[KEY_CODES[code]] = false;
 }
-/**
- * Sets up the document to listen to onkeydown events (fired when
- * any key on the keyboard is pressed down). When a key is pressed,
- * it sets the appropriate direction to true to let us know which
- * key it was.
- */
+
 document.onkeydown = function(e) {
-	// Firefox and opera use charCode instead of keyCode to
-	// return which key was pressed.
+
 	var keyCode = (e.keyCode) ? e.keyCode : e.charCode;
   if (KEY_CODES[keyCode]) {
 		e.preventDefault();
     KEY_STATUS[KEY_CODES[keyCode]] = true;
   }
 }
-/**
- * Sets up the document to listen to ownkeyup events (fired when
- * any key on the keyboard is released). When a key is released,
- * it sets teh appropriate direction to false to let us know which
- * key it was.
- */
+
 document.onkeyup = function(e) {
   var keyCode = (e.keyCode) ? e.keyCode : e.charCode;
   if (KEY_CODES[keyCode]) {
@@ -1125,7 +1104,6 @@ document.onkeyup = function(e) {
     KEY_STATUS[KEY_CODES[keyCode]] = false;
   }
 }
-
 
 
 function touchdown(event) {
@@ -1144,11 +1122,6 @@ function touchoff(event) {
 }
 
 
-/**
- * requestAnim shim layer by Paul Irish
- * Finds the first API that works to optimize the animation loop,
- * otherwise defaults to setTimeout().
- */
  window.onblur = function() {
 	 blur = true;
 	 game.backgroundAudio.pause();
@@ -1161,6 +1134,12 @@ function touchoff(event) {
 	 game.backgroundAudio.play();
 
  }
+
+ /**
+  * requestAnim shim layer by Paul Irish
+  * Finds the first API that works to optimize the animation loop,
+  * otherwise defaults to setTimeout().
+  */
 
 window.requestAnimFrame = (function(){
 	return  window.requestAnimationFrame       ||
