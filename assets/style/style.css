@@ -253,12 +253,16 @@ p:focus {
 }
 
 
-@media only screen and (max-width: 599px) and (orientation : portrait) {
+@media only screen and (max-width: 599px) and (orientation : portrait)
+
+{
   body {
     width: 100%;
+
   }
   canvas {
     max-width: 100%;
+
   }
 
   button#left, button#right {

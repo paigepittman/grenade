@@ -1183,9 +1183,11 @@ window.requestAnimFrame = (function(){
 })();
 
 //
-// window.requestAnimFrame = (function(){
-// 	return
-// 			function( callback, element){
-// 				window.setTimeout(callback, 1000 / 60);
-// 			};
-// })();
+// window.requestAnimFrame = function(){
+// 	return (
+// 		function( callback, element){
+// 			window.setTimeout(callback, 1000 / 90);
+// 		}
+// 	)
+//
+// }();
