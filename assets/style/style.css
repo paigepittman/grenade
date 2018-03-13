@@ -181,7 +181,7 @@ body {
   background-color: rgb(133, 133, 133);
   position: absolute;
   left: 90px;
-  top: 18px;
+  bottom: 10px;
 }
 
 #right {
@@ -190,7 +190,7 @@ body {
   color: blue;
   position: absolute;
   left: 150px;
-  top: 19px;
+  bottom: 10px;
 }
 
 i.material-icons {
@@ -214,26 +214,7 @@ i.material-icons {
 
 }
 
-#fire {
-  color: white;
-  background-color: red;
-  font-size: 20px;
-  border-style: outset;
-  border-radius: 200px;
-  border-color: red;
-  padding: 8px 7px 8px 7px;
-  position: absolute;
-  margin-left: 40px;
-  top: 15px;
-  border-style: inset;
-  border: none;
-  user-select: none;
-  -webkit-user-select: none; /* Safari 3.1+ */
-  -moz-user-select: none; /* Firefox 2+ */
-  -ms-user-select: none; /* IE 10+ */
-   /* Standard syntax*/
 
-}
 * {
   user-select: none;
   -webkit-user-select: none; /* Safari 3.1+ */
@@ -255,49 +236,6 @@ p:focus {
   -ms-user-select: none; /* IE 10+ */
   user-select: none; /* Standard syntax*/
 }
-
-@media only screen and (max-width: 599px) and (orientation : portrait) {
-  body {
-    width: 100%;
-  }
-  canvas {
-    max-width: 100%;
-  }
-
-  .main-container {
-    position: absolute;
-    top: 17%;
-    left: 0;
-  }
-  #score {
-    max-width: 100%;
-    position: absolute;
-    top: 70%;
-  }
-  #controller {
-    visibility: visible;
-  }
-
-  #left {
-    left: 15%;
-  }
-
-  #right {
-    left:70%;
-  }
-
-  #game-over, #you-win {
-    width: 100%;
-    font-size: large;
-    height: 10%;
-  }
-
-  #start-game, #loading {
-    max-width: 100%;
-    font-size: 15px;
-  }
-}
-
 
 @media only screen and (max-width: 1024px) and (orientation : landscape) {
 
@@ -359,4 +297,88 @@ p:focus {
 }
 
 
+}
+
+@media only screen and (max-width: 768px)  {
+  #controller {
+    visibility: visible;
+  }
+
+  #left {
+    left: 15%;
+  }
+
+  #right {
+    left:70%;
+  }
+}
+
+
+@media only screen and (max-width: 599px) and (orientation : portrait) {
+  body {
+    width: 100%;
+  }
+  canvas {
+    max-width: 100%;
+  }
+
+  button#left, button#right {
+   border-style: outset;
+   border-color: rgb(133, 133, 133);
+   height: 40px;
+   /* padding-bottom: 40px; */
+
+ }
+   button#left {
+     position: absolute;
+     left: 0;
+   }
+   button#right {
+     position: absolute;
+    right: 0;
+
+   }
+
+
+  .main-container {
+    position: absolute;
+    top: 17%;
+    left: 0;
+  }
+  #score {
+    max-width: 100%;
+    position: absolute;
+    top: 70%;
+
+  }
+  #controller {
+    position: absolute;
+    left: 0;
+    visibility: visible;
+    width: inherit;
+    max-width: 100%;
+  }
+
+  #left {
+    left: 0;
+    width: 50%;
+    margin-right: 0;
+  }
+
+  #right {
+    left: 50%;
+    width: 50%;
+    margin-left: 0;
+  }
+
+  #game-over, #you-win {
+    width: 100%;
+    font-size: large;
+    height: 10%;
+  }
+
+  #start-game, #loading {
+    max-width: 100%;
+    font-size: 15px;
+  }
 }
