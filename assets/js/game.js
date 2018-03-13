@@ -57,12 +57,12 @@ var imageRepository = new function() {
 		if (player === "claude") {
 			$("#claude").addClass("selected");
 			$("#eprom").removeClass("selected");
-			userChoice = "assets/imgs/claude-final.png";
+			userChoice = "assets/imgs/claude-ship.png";
 		}
 		else if (player === "eprom") {
 			$("#eprom").addClass("selected");
 			$("#claude").removeClass("selected");
-			userChoice = "assets/imgs/eprom-final.png";
+			userChoice = "assets/imgs/eprom-ship.png";
 		}
 		imageRepository.spaceship.src = userChoice;
 
@@ -101,7 +101,7 @@ var imageRepository = new function() {
 	// Set images src
 	this.background.src = "assets/imgs/background.png";
 	this.bullet.src = "assets/imgs/bullet.png";
-	this.spaceship.src = "assets/imgs/claude-final.png";
+	this.spaceship.src = "assets/imgs/claude-ship.png";
  	this.enemy.srcArray = ["assets/imgs/yellow-plane.png", "assets/imgs/blue-plane.png", "assets/imgs/orange-plane.png"];
 	this.enemy.src = "assets/imgs/yellow-plane.png";
 	this.enemyBullet.src = "assets/imgs/grenade-new.png";
@@ -623,7 +623,7 @@ function Ship() {
 	 * Fires two bullets
 	 */
 	this.fire = function() {
-		this.bulletPool.get(this.x+50, this.y, 3);
+		this.bulletPool.get(this.x+22, this.y, 3);
 		game.laser.get();
 	};
 }
