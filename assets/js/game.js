@@ -29,14 +29,34 @@ function init() {
 	//game.init();
 }
 
-window.onorientationchange = function() {
+window.onload = function() {
+	var orientation = window.orientation;
 	var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 	if (isMobile) {
-	  $("body").addClass("landscape");
+		if (orientation === 90 || orientation === -90) {
+			 $("body").addClass("landscape");
+		}
+			else {
+				$("body").removeClass("landscape");
+			}
+
 	}
-	else {
-		$("body").removeClass("landscape");
+}
+
+
+window.onorientationchange = function() {
+	var orientation = window.orientation;
+	var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+	if (isMobile) {
+		if (orientation === 90 || orientation === -90) {
+			 $("body").addClass("landscape");
+		}
+			else {
+				$("body").removeClass("landscape");
+			}
+
 	}
+
 }
 
 /**
