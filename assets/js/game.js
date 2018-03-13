@@ -915,6 +915,7 @@ function checkReadyState() {
 		window.clearInterval(game.checkAudio);
 		document.getElementById('loading').style.display = "none";
 		document.getElementById('score').style.display = "block";
+		$('.controller').addClass("show-controls");
 		game.start();
 		//game.timer();
 
@@ -1158,7 +1159,7 @@ function touchoff(event) {
  window.onfocus = function() {
 	 blue = false;
 	 game.backgroundAudio.play();
-	
+
  }
 
 window.requestAnimFrame = (function(){
