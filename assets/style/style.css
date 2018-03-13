@@ -237,67 +237,6 @@ p:focus {
   user-select: none; /* Standard syntax*/
 }
 
-@media only screen and (max-width: 1024px) and (orientation : landscape) {
-
-  /* #controller {
-    visibility: visible;
-    top: 90%;
-  } */
-
-  canvas {
-    max-width: 600px;
-    height: 75%;
-  }
-  html {
-    height: 100%;
-  }
-  body {
-    height: 100%;
-    width: 100%;
-  }
-
-  .main-container {
-    max-width: 70%;
-    margin: auto;
-    position: relative;
-    margin: auto;
-    max-height: 90%;
-  }
-  #right {
-    font-size: 40px;
-    background-color: rgb(133, 133, 133);
-    position: absolute;
-    left: 300px;
-    top: 18px;
-  }
-#left {
-    font-size: 40px;
-    background-color: rgb(133, 133, 133);
-    position: absolute;
-    left: 110px;
-    top: 18px;
-  }
-
-#score {
-  max-width: 25%;
-  position: absolute;
-  top: 18%;
-  left: 93%;
-}
-
-#game-over, #you-win {
-  width: 100%;
-  font-size: large;
-  height: 10%;
-}
-
-#start-game, #loading {
-  max-width: 100%;
-  font-size: 15px;
-}
-
-
-}
 
 @media only screen and (max-width: 768px)  {
   #controller {
@@ -384,7 +323,7 @@ p:focus {
 }
 
 @media (orientation: landscape) {
-  body {
+  body.landscape {
     -webkit-transform: rotate(-90deg);
     -moz-transform: rotate(-90deg);
     -o-transform: rotate(-90deg);

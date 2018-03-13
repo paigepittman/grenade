@@ -29,6 +29,15 @@ function init() {
 	//game.init();
 }
 
+window.onorientationchange = function() {
+	var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+	if (isMobile) {
+	  $("body").addClass("landscape");
+	}
+	else {
+		$("body").removeClass("landscape");
+	}
+}
 
 /**
  * Define an object to hold all our images for the game so images
@@ -1140,7 +1149,7 @@ function touchoff(event) {
   * Finds the first API that works to optimize the animation loop,
   * otherwise defaults to setTimeout().
   */
-
+//
 window.requestAnimFrame = (function(){
 	return  window.requestAnimationFrame       ||
 			window.webkitRequestAnimationFrame ||
@@ -1148,6 +1157,15 @@ window.requestAnimFrame = (function(){
 			window.oRequestAnimationFrame      ||
 			window.msRequestAnimationFrame     ||
 			function(/* function */ callback, /* DOMElement */ element){
+				//alert("setTimeout");
 				window.setTimeout(callback, 1000 / 60);
 			};
 })();
+
+//
+// window.requestAnimFrame = (function(){
+// 	return
+// 			function( callback, element){
+// 				window.setTimeout(callback, 1000 / 60);
+// 			};
+// })();
