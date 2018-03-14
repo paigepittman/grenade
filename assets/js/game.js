@@ -45,11 +45,12 @@ var images = new function() {
 	// Define images
 	this.background = new Image();
 	this.hero = new Image();
+	this.hero2 = new Image();
 	this.bullet = new Image();
 	this.enemy = new Image();
 	this.grenade = new Image();
 
-	var numImages = 5;
+	var numImages = 6;
 	var numLoaded = 0;
 	var userStart = false;
 	var userChoice;
@@ -107,6 +108,11 @@ var images = new function() {
 	this.hero.onload = function() {
 		imageLoaded();
 	}
+
+	this.hero2.onload = function() {
+		imagesLoaded();
+	}
+
 	this.bullet.onload = function() {
 		imageLoaded();
 	}
@@ -121,6 +127,7 @@ var images = new function() {
 	this.background.src = "assets/imgs/background.png";
 	this.bullet.src = "assets/imgs/bullet.png";
 	this.hero.src = "assets/imgs/claude-ship.png";
+	this.hero2.src = "assets/imgs/claude-ship.png";
  	this.enemy.srcArray = ["assets/imgs/yellow-plane.png", "assets/imgs/blue-plane.png", "assets/imgs/orange-plane.png"];
 	this.enemy.src = "assets/imgs/yellow-plane.png";
 	this.grenade.src = "assets/imgs/grenade-new.png";
@@ -667,7 +674,7 @@ function Enemy() {
 
 
 	this.draw = function() {
-		this.context.clearRect(this.x-1, this.y, this.width+1, this.height+2);
+		this.context.clearRect(this.x-1, this.y, this.width+2, this.height+2);
 		this.x += this.speedX;
 		this.y += this.speedY;
 		if (this.x <= this.leftEdge) {
