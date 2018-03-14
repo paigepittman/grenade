@@ -3,6 +3,8 @@ var game = new Game();
 
 var blur = false;
 
+var mobile = false;
+
 function init() {
 	//game.init();
 }
@@ -11,6 +13,7 @@ window.onload = function() {
 	var orientation = window.orientation;
 	var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 	if (isMobile) {
+		mobile = true;
 		if (orientation === 90 || orientation === -90) {
 			 $("body").addClass("landscape");
 		}
@@ -74,6 +77,20 @@ var images = new function() {
 	$("#start-click").on("click", function() {
 		$("#start-game").css("display", "none");
 		document.getElementById('loading').style.display = "block";
+		var mission = "your mission: make it to the end of the song to win";
+		var typeMission = setInterval(appendMission, 100);
+		var i = 0;
+
+		function appendMission() {
+			$("#mission-text").append(mission[i]);
+			i++;
+			if (i === mission.length) {
+				clearInterval(typeMission);
+
+			}
+
+		}
+
 		game.init();
 
 	})
@@ -839,6 +856,7 @@ function Game() {
 
 		this.backgroundAudio.currentTime = 0;
 		this.backgroundAudio.play();
+
 		this.start();
 
 	};
@@ -865,12 +883,15 @@ function Game() {
 
 function checkReadyState() {
 	game.loadingTime++;
-	if (game.gameOverAudio.readyState === 4 && game.backgroundAudio.readyState === 4 && game.loadingTime===5) {
+	if (game.gameOverAudio.readyState === 4 && game.backgroundAudio.readyState === 4 && game.loadingTime===8) {
 		window.clearInterval(game.checkAudio);
 		document.getElementById('loading').style.display = "none";
 		document.getElementById('score').style.display = "block";
-		$('.controller').addClass("show-controls");
+		$(".controller").attr("id", "controller");
 		game.start();
+		if (mobile) {
+			$("#directions").css("display", "block");
+		}
 
 
 	}
@@ -987,6 +1008,10 @@ function animate() {
 	if (parseInt(game.backgroundAudio.currentTime) === parseInt(game.backgroundAudio.duration/2) + 3) {
 		$("#halfway").css("display", "none");
 
+	}
+
+	if (game.backgroundAudio.currentTime >= 3) {
+		$("#directions").css("display", "none");
 	}
 
 	if (game.playerLives === 0) {

@@ -8,6 +8,10 @@ body {
   background-color: black;
 }
 
+#directions {
+  display: none;
+}
+
 .main-container {
   width: 600px;
   margin:auto;
@@ -125,7 +129,7 @@ body {
     }
   }
 
-#halfway {
+#halfway, #directions {
   animation: blinker 1s linear infinite;
   display: none;
   font-family: 'Press Start 2P', cursive;
@@ -256,6 +260,23 @@ p:focus {
 @media only screen and (max-width: 599px) and (orientation : portrait)
 
 {
+
+
+  #halfway {
+    position: absolute;
+    text-align: center;
+    top: 145px;
+    left: 20px;
+  }
+
+   #directions {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+
+  }
+
+
   body {
     width: 100%;
 

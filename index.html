@@ -26,7 +26,7 @@
 				score: <span id="your-score">0</span>
 				lives: <span id="your-lives">4</span>
 		</div>
-		<div id="controller">
+		<div class="controller">
 			<button id="left" ontouchstart="touchdown(37)" ontouchend="touchoff(37)"> <i class="material-icons">forward</i></i></button>
 			<button id="right" ontouchstart="touchdown(39)" ontouchend="touchoff(39)"> <i class="material-icons">forward</i></button>
 		</div>
@@ -45,12 +45,12 @@
 			start
 		</p>
 	</div>
+		<div id="directions">Tap to shoot!</div>
 		<div id="halfway">You're halfway to saving the world!</div>
 		<div class="game-over" id="game-over">GAME OVER<p><span onclick="game.restart()">Restart</span></p></div>
 			<div class="you-win" id="you-win">You just helped Claude Vonstroke and EPROM save mankind!<p><span onclick="game.restart()">Restart</span></p></div>
 		<div class="loading" id="loading">
-				<p id="mission">
-				your misssion: make it to the end of the song to win
+				<p id="mission"><span id="mission-text"></span>
 			</p>
 			<br /><br />
 			<p id="load-sign">LOADING...</p>
