@@ -1032,7 +1032,7 @@ function animate() {
 	}
 
 	if (game.backgroundAudio.currentTime >= 3) {
-		//$("#directions").css("display", "none");
+		$("#directions").css("display", "none");
 	}
 
 	if (game.playerLives === 0) {
