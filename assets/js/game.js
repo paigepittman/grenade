@@ -127,7 +127,7 @@ var images = new function() {
 		imageLoaded();
 	}
 	this.redGrenade.onload = function() {
-		imageLoaded)();
+		imageLoaded();
 	}
 
 	// Set images src
