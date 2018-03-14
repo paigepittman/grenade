@@ -637,14 +637,19 @@ Hero.prototype = new Drawable();
 
 
 function Enemy() {
+	var array = ["assets/imgs/yellow-plane.png", "assets/imgs/blue-plane.png", "assets/imgs/orange-plane.png"];
 	var percentFire = 2;
 	var chance = 0;
 	this.alive = false;
 	this.collidableWith = "bullet";
 	this.type = "enemy";
+	this.yellow = new Image();
+	this.blue = new Image();
+	this.orange = new Image();
 
-
-	 ///FIX COLOR PLANES HEREEEEEEEEE
+	this.yellow.src = "assets/imgs/yellow-plane.png";
+	this.blue.src ="assets/imgs/blue-plane.png";
+	this.orange.src = "assets/imgs/blue-plane.png";	 ///FIX COLOR PLANES HEREEEEEEEEE
 	this.spawn = function(x, y, speed, color) {
 
 		this.color = color;
