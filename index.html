@@ -11,18 +11,14 @@
 
 	</head>
 	<body>
-		<!-- The canvas for the panning background -->
 		<div class="main-container">
-
 		<canvas id="background" width="600" height="360">
 			Your browser does not support canvas. Please try again with a different browser.
 		</canvas>
-		<!-- The canvas for all enemy ships and bullets -->
 		<canvas id="main" width="600" height="360">
 		</canvas>
-		<!-- The canvas the ship uses (can only move up
-         one forth the screen. -->
-		<canvas id="ship" width="600" height="360" ontouchstart="touchdown(32)" ontouchend="touchoff(32)" >
+
+		<canvas id="hero" width="600" height="360" ontouchstart="touchdown(32)" ontouchend="touchoff(32)" >
 		</canvas>
 		<div id="score">
 				score: <span id="your-score">0</span>
