@@ -9,6 +9,8 @@ function init() {
 	//game.init();
 }
 
+
+// checking for mobile and preventing the user from playing in landscape initially
 window.onload = function() {
 	var orientation = window.orientation;
 	var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
@@ -24,6 +26,7 @@ window.onload = function() {
 	}
 }
 
+// preventing the user from playing in landscape if the device is turned to landscape
 
 window.onorientationchange = function() {
 	var orientation = window.orientation;
@@ -49,6 +52,7 @@ var images = new function() {
 	this.bullet = new Image();
 	this.enemy = new Image();
 	this.grenade = new Image();
+	this.redGrenade = new Image();
 
 	var numImages = 6;
 	var numLoaded = 0;
@@ -78,7 +82,7 @@ var images = new function() {
 	$("#start-click").on("click", function() {
 		$("#start-game").css("display", "none");
 		document.getElementById('loading').style.display = "block";
-		var mission = "your mission: make it to the end of the song to win";
+		var mission = "your mission: make it to the end of the track to save the world";
 		var typeMission = setInterval(appendMission, 100);
 		var i = 0;
 
@@ -110,7 +114,7 @@ var images = new function() {
 	}
 
 	this.hero2.onload = function() {
-		imagesLoaded();
+		imageLoaded();
 	}
 
 	this.bullet.onload = function() {
@@ -122,6 +126,9 @@ var images = new function() {
 	this.grenade.onload = function() {
 		imageLoaded();
 	}
+	this.redGrenade.onload = function() {
+		imageLoaded)();
+	}
 
 	// Set images src
 	this.background.src = "assets/imgs/background.png";
@@ -131,6 +138,7 @@ var images = new function() {
  	this.enemy.srcArray = ["assets/imgs/yellow-plane.png", "assets/imgs/blue-plane.png", "assets/imgs/orange-plane.png"];
 	this.enemy.src = "assets/imgs/yellow-plane.png";
 	this.grenade.src = "assets/imgs/grenade-new.png";
+	this.redGrenade.src = "assets/imgs/red-grenade-new.png";
 }
 
 
