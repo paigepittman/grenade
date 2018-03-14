@@ -645,7 +645,7 @@ function Enemy() {
 
 
 	this.draw = function() {
-		this.context.clearRect(this.x-1, this.y, this.width+1, this.height+1);
+		this.context.clearRect(this.x-1, this.y, this.width+1, this.height+2);
 		this.x += this.speedX;
 		this.y += this.speedY;
 		if (this.x <= this.leftEdge) {
@@ -1042,6 +1042,11 @@ for (code in KEY_CODES) {
   KEY_STATUS[KEY_CODES[code]] = false;
 }
 
+
+$("button").on("click", function(e) {
+	e.preventDefault();
+})
+
 document.onkeydown = function(e) {
 
 	var keyCode = (e.keyCode) ? e.keyCode : e.charCode;
@@ -1057,6 +1062,10 @@ document.onkeyup = function(e) {
     e.preventDefault();
     KEY_STATUS[KEY_CODES[keyCode]] = false;
   }
+}
+
+document.ontouchmove = function(event) {
+	event.preventDefault()
 }
 
 //detecting movement for mobile
@@ -1075,7 +1084,7 @@ function touchoff(event) {
     }
 }
 
-//prevents music and effects from continuing when browser minimized (also prevents from playing on phone lockcreen)
+//prevents music from continuing when browser minimized (also prevents from playing on phone lockcreen)
  window.onblur = function() {
 	 blur = true;
 	 game.backgroundAudio.pause();
