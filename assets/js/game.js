@@ -908,8 +908,9 @@ function checkReadyState() {
 		window.clearInterval(game.checkAudio);
 		document.getElementById('loading').style.display = "none";
 		document.getElementById('score').style.display = "block";
-		$(".controller").attr("id", "controller");
 		game.start();
+		$(".controller").attr("id", "controller");
+
 		if (mobile) {
 			$("#directions").css("display", "block");
 		}
