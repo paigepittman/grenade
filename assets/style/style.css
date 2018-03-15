@@ -282,14 +282,16 @@ p:focus {
   }
 
 button#fire {
-  background: red;
+  background: #b70303;
   border-style: outset;
-  border-color: red;
+  border-color: #da0505;
   position: absolute;
   position: relative;
   width: 100%;
   top: -140%;
   height: 60px;
+  text-decoration: unset;
+  border-width: 5px;
   }
 
 
